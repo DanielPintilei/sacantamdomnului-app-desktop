@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "module": "commonjs",
+    "lib": ["dom", "dom.iterable", "esnext", "scripthost"],
+    "target": "es6",
+    "outDir": "build",
+    "jsx": "react",
+    "paths": {
+      "*": ["node_modules/*"]
+    },
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "noUnusedLocals": true
+  },
+  "include": ["src/**/*"]
+}

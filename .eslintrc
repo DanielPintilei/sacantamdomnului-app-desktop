@@ -1,0 +1,12 @@
+{
+  "parser": "typescript-eslint-parser",
+  "extends": ["standard", "standard-react"],
+  "plugins": ["typescript", "react"],
+  "env": {
+    "browser": true,
+    "jest": true
+  },
+  "rules": {
+    "comma-dangle": ["error", "always-multiline"]
+  }
+}
