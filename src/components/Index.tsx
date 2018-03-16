@@ -10,6 +10,7 @@ const FolderWrapper = styled.div`
 const ButtonFolder = styled.button`
   display: flex;
   align-items: center;
+  width: 100%;
   padding-right: 10px;
   padding-left: 0;
   font-size: 15px;

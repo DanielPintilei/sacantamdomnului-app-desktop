@@ -10,10 +10,11 @@ const normalizeTitle = (title: string) =>
 const generatePath = (number: number, title: string) =>
   `${number}-${normalizeTitle(title)}`
 
+const refren = /Refren\n([^]*?)\n\n/
+const autor = /(Versuri:(.*)\n)/
+const melodie = /(Melodie:(.*)\n)/
+
 const formatSongContent = (songContent: string) => {
-  const refren = /Refren\n([^]*?)\n\n/
-  const autor = /(Versuri:(.*)\n)/
-  const melodie = /(Melodie:(.*)\n)/
   const formatted = songContent
     .replace('Refren\n\n', 'Refren\n')
     .replace(refren, '<em>$1</em>\n\n')
@@ -26,12 +27,47 @@ const formatSongContent = (songContent: string) => {
   return formatted
 }
 
+const formatStanzas = (content: string): string[] => {
+  const contentWithRefrenNormalized = content.replace('Refren\n\n', 'Refren\n')
+  const contentMatchRefren = contentWithRefrenNormalized.match(refren)
+  const contentTrimmed = contentWithRefrenNormalized
+    .replace(refren, '')
+    .replace(autor, '')
+    .replace(melodie, '')
+    .trim()
+  const contentSplit = contentTrimmed.split('\n\n')
+  const formatStanza = (stanza: string): string =>
+    stanza
+      .replace(/\(bis\)/g, '<small>(bis)</small>')
+      .replace(/\/\//g, '/')
+      .replace(/\/(?!small>)(?!em>)/g, '<small>/</small>')
+      .replace(/(\n)+$/, '')
+  const stanzas = contentSplit.map(stanza => {
+    return formatStanza(stanza)
+  })
+  const addEnding = (stanzaArray: string[]): string[] =>
+    stanzaArray.map((stanza, index) => {
+      if (stanzaArray.length - 1 === index) return stanza + '\n\nAmin'
+      return stanza
+    })
+  if (contentMatchRefren) {
+    const formattedRefren = formatStanza(contentMatchRefren[1])
+    const stanzasWithRefren = stanzas.reduce(
+      (arr, next) => [...arr, next, formattedRefren],
+      [],
+    )
+    return [...addEnding(stanzasWithRefren), '']
+  }
+  return [...addEnding(stanzas), '']
+}
+
 const formatSongs = (songs: Pieces): Pieces =>
   songs.filter(x => x).map(({ number, title, content }) => ({
     number,
     title,
     content: formatSongContent(content),
     path: generatePath(number, title),
+    stanzas: formatStanzas(content),
   }))
 
 const formatPoemsFolder = (books: Pieces): Pieces =>
@@ -41,6 +77,7 @@ const formatPoemsFolder = (books: Pieces): Pieces =>
     description,
     content,
     path: generatePath(number, title),
+    stanzas: formatStanzas(content),
   }))
 
 const formatPoemsFolders = (poems: PoemsRaw): Folders =>
@@ -97,6 +134,7 @@ export type Piece = {
   description?: string
   content: string
   path: string
+  stanzas: string[]
 }
 type Pieces = Piece[]
 type PoemsRaw = { [title: string]: { books: Pieces } }
