@@ -36,6 +36,11 @@ function setStatePresentWindows(state) {
     ref.webContents.send('setStanza', state)
   })
 }
+function closePresentWindows(state) {
+  presentWindows.forEach(({ ref }) => {
+    ref.close()
+  })
+}
 
 function createPresentWindow(initialState, id) {
   const window = new BrowserWindow({
@@ -65,6 +70,7 @@ ipcMain.on('openPresentation', (_, payload) => {
 ipcMain.on('setStanza', (_, payload) => {
   setStatePresentWindows(payload)
 })
+ipcMain.on('closePresentations', closePresentWindows)
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {

@@ -12,6 +12,7 @@ const Wrapper = styled.div`
   font-size: 32px;
   color: #fff;
   background-color: #000;
+  user-select: none;
   -webkit-app-region: drag;
 `
 
@@ -19,7 +20,7 @@ class AppPresent extends React.Component {
   state = {
     stanza: '',
   }
-  componentDidMount () {
+  componentDidMount() {
     const setState = (_: any, payload: string) => {
       this.setState({ stanza: payload })
       console.log(payload)
@@ -27,7 +28,7 @@ class AppPresent extends React.Component {
     ipcRenderer.on('openPresentation', setState)
     ipcRenderer.on('setStanza', setState)
   }
-  render () {
+  render() {
     const { stanza } = this.state
     return (
       <Wrapper>

@@ -117,15 +117,3 @@ const Main: React.StatelessComponent<MainProps> = ({ contentArray }) => (
 )
 
 export default Main
-
-{
-  /* <div className="main">
-            <button onClick={() => ipcRenderer.send('openPresentation', '')}>
-              Open presentation
-            </button>
-            <button onClick={() => ipcRenderer.send('setStanza', '')}>
-              Send stanza
-            </button>
-            {contentArray.find(item => item.number === 3).content}
-          </div> */
-}

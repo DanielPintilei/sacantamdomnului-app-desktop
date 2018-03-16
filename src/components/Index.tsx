@@ -4,35 +4,96 @@ import styled from 'styled-components'
 import * as Resizable from 're-resizable'
 import { ContentFormatted, Piece, Folder as FolderType } from '../formatContent'
 
+const FolderWrapper = styled.div`
+  min-width: 250px;
+`
+const ButtonFolder = styled.button`
+  display: flex;
+  align-items: center;
+  padding-right: 10px;
+  padding-left: 0;
+  font-size: 15px;
+  text-align: left;
+  .dots {
+    width: 10px;
+    border-top: 1px dotted #000;
+  }
+  svg {
+    margin-right: 5px;
+  }
+`
 const FileWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  margin-left: 21px;
+  border-left: 1px dotted #000;
+  & > div:last-child button:not(.opened) {
+    position: relative;
+    &::before {
+      content: '';
+      display: block;
+      position: absolute;
+      bottom: 0;
+      left: -1px;
+      width: 1px;
+      height: calc(50% - 1px);
+      background-color: #fff;
+    }
+  }
+  a {
+    padding: 4px 20px 4px 10px;
+    font-size: 15px;
+    text-decoration: none;
+    color: #000;
+    &:hover {
+      background-color: hsla(0, 0%, 0%, 0.05);
+    }
+  }
 `
 type FolderProps = {
   title: string
+  isSubfolder?: boolean
+  defaultOpen?: boolean
 }
 type FolderState = {
-  opened: boolean
+  opened: boolean | undefined
 }
 class Folder extends React.Component<FolderProps, FolderState> {
   state = {
-    opened: false,
+    opened: this.props.defaultOpen,
   }
   render() {
-    const { title, children } = this.props
+    const { title, isSubfolder, children } = this.props
     const { opened } = this.state
     return (
-      <div>
-        <button
+      <FolderWrapper>
+        <ButtonFolder
           type="button"
           onClick={() =>
             this.setState(prevState => ({ opened: !prevState.opened }))
           }
+          style={{ paddingLeft: isSubfolder ? 0 : 10 }}
+          className={opened ? 'opened' : ''}
         >
+          {isSubfolder && <span className="dots" />}
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
+            {!opened && <line x1="12" y1="11" x2="12" y2="17" />}
+            <line x1="9" y1="14" x2="15" y2="14" />
+          </svg>
           {title}
-        </button>
+        </ButtonFolder>
         {opened && <FileWrapper>{children}</FileWrapper>}
-      </div>
+      </FolderWrapper>
     )
   }
 }
@@ -40,37 +101,20 @@ class Folder extends React.Component<FolderProps, FolderState> {
 const mapIndexLinks = (files: any[]) =>
   files.map((file: Piece) => (
     <Link to={file.path} key={file.path}>
-      {file.title}
+      {file.number}. {file.title}
     </Link>
   ))
 const Folders = ({ folders }: any) =>
   folders.map((folder: FolderType) => (
-    <Folder title={folder.title} key={folder.title}>
+    <Folder title={folder.title} isSubfolder key={folder.title}>
       {mapIndexLinks(folder.files)}
     </Folder>
   ))
 
 const Wrapper = styled.div`
-  .inner {
-    height: 100vh;
-    overflow-y: scroll;
-    & > div {
-      min-width: 250px;
-      & > button {
-        display: block;
-        width: 100%;
-        padding: 10px 15px;
-        font-size: 15px;
-        text-align: left;
-        background-color: hsla(0, 0%, 0%, 0.05);
-        box-shadow: 0 2px 3px 0 hsla(0, 0%, 0%, 0.1);
-      }
-      &:first-child > button {
-        box-shadow: inset 0 2px 3px 0 hsla(0, 0%, 0%, 0.1),
-          0 2px 3px 0 hsla(0, 0%, 0%, 0.1);
-      }
-    }
-  }
+  height: 100vh;
+  padding: 10px 0 10px 4px;
+  overflow-y: scroll;
 `
 type IndexProps = {
   content: ContentFormatted
@@ -83,7 +127,7 @@ class Index extends React.Component<IndexProps> {
     const { content: { songs, poems } } = this.props
     const { width } = this.state
     return (
-      <Wrapper>
+      <div>
         <Resizable
           size={{ width, height: '100vh' }}
           onResizeStop={(
@@ -99,16 +143,16 @@ class Index extends React.Component<IndexProps> {
           enable={{ right: true }}
           minWidth={0}
         >
-          <div className="inner">
-            <Folder title={songs.title}>
+          <Wrapper>
+            <Folder title={songs.title} defaultOpen>
               <Folders folders={songs.folders} />
             </Folder>
-            <Folder title={poems.title}>
+            <Folder title={poems.title} defaultOpen>
               <Folders folders={poems.folders} />
             </Folder>
-          </div>
+          </Wrapper>
         </Resizable>
-      </Wrapper>
+      </div>
     )
   }
 }
