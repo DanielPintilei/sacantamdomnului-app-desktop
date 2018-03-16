@@ -4,7 +4,7 @@ const electron = require('electron')
 const { app, BrowserWindow, Menu, ipcMain } = electron
 
 // Adds debug features like hotkeys for triggering dev tools and reload
-if (process.env.NODE_ENV !== 'production') require('electron-debug')()
+require('electron-debug')()
 
 // Prevent window being garbage collected
 let mainWindow

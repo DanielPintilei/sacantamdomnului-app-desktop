@@ -1,7 +1,8 @@
 import * as React from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
-import { ContentFormatted, File, Folder as FolderType } from '../formatContent'
+import * as Resizable from 're-resizable'
+import { ContentFormatted, Piece, Folder as FolderType } from '../formatContent'
 
 const FileWrapper = styled.div`
   display: flex;
@@ -37,7 +38,7 @@ class Folder extends React.Component<FolderProps, FolderState> {
 }
 
 const mapIndexLinks = (files: any[]) =>
-  files.map((file: File) => (
+  files.map((file: Piece) => (
     <Link to={file.path} key={file.path}>
       {file.title}
     </Link>
@@ -50,24 +51,63 @@ const Folders = ({ folders }: any) =>
   ))
 
 const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 400px;
+  .inner {
+    height: 100vh;
+    overflow-y: scroll;
+    & > div {
+      min-width: 250px;
+      & > button {
+        display: block;
+        width: 100%;
+        padding: 10px 15px;
+        font-size: 15px;
+        text-align: left;
+        background-color: hsla(0, 0%, 0%, 0.05);
+        box-shadow: 0 2px 3px 0 hsla(0, 0%, 0%, 0.1);
+      }
+      &:first-child > button {
+        box-shadow: inset 0 2px 3px 0 hsla(0, 0%, 0%, 0.1),
+          0 2px 3px 0 hsla(0, 0%, 0%, 0.1);
+      }
+    }
+  }
 `
 type IndexProps = {
   content: ContentFormatted
 }
 class Index extends React.Component<IndexProps> {
+  state = {
+    width: 340,
+  }
   render() {
     const { content: { songs, poems } } = this.props
+    const { width } = this.state
     return (
       <Wrapper>
-        <Folder title={songs.title}>
-          <Folders folders={songs.folders} />
-        </Folder>
-        <Folder title={poems.title}>
-          <Folders folders={poems.folders} />
-        </Folder>
+        <Resizable
+          size={{ width, height: '100vh' }}
+          onResizeStop={(
+            e: any,
+            direction: any,
+            ref: any,
+            d: { width: number },
+          ) => {
+            this.setState({
+              width: width + d.width,
+            })
+          }}
+          enable={{ right: true }}
+          minWidth={0}
+        >
+          <div className="inner">
+            <Folder title={songs.title}>
+              <Folders folders={songs.folders} />
+            </Folder>
+            <Folder title={poems.title}>
+              <Folders folders={poems.folders} />
+            </Folder>
+          </div>
+        </Resizable>
       </Wrapper>
     )
   }

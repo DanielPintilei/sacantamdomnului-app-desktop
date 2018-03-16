@@ -1,8 +1,10 @@
 import * as React from 'react'
 import { ipcRenderer } from 'electron'
-import { BrowserRouter as Router } from 'react-router-dom'
+import { HashRouter as Router } from 'react-router-dom'
 import styled from 'styled-components'
 import Index from './Index'
+import Main from './Main'
+import Search from './Search'
 import formatContent, {
   sortFoldersContent,
   arrayFoldersContent,
@@ -10,8 +12,11 @@ import formatContent, {
 
 const rawContent = require('../../content.json')
 const content = formatContent(rawContent)
-// const songsSorted = sortSongContent(cantari.folders)
-// const songsArray = arraySongContent(cantari.folders)
+// const contentSorted = arrayFoldersContent(cantari.folders)
+const contentArray = arrayFoldersContent([
+  ...content.songs.folders,
+  ...content.poems.folders,
+])
 
 const Wrapper = styled.div`
   display: flex;
@@ -22,12 +27,8 @@ class App extends React.Component {
       <Router>
         <Wrapper>
           <Index content={content} />
-          <button onClick={() => ipcRenderer.send('openPresentation', '')}>
-            Open presentation
-          </button>
-          <button onClick={() => ipcRenderer.send('setStanza', '')}>
-            Send stanza
-          </button>
+          <Main contentArray={contentArray} />
+          <Search />
         </Wrapper>
       </Router>
     )

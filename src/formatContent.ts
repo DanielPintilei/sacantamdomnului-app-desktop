@@ -26,7 +26,7 @@ const formatSongContent = (songContent: string) => {
   return formatted
 }
 
-const formatSongs = (songs: Songs): Songs =>
+const formatSongs = (songs: Pieces): Pieces =>
   songs.filter(x => x).map(({ number, title, content }) => ({
     number,
     title,
@@ -34,7 +34,7 @@ const formatSongs = (songs: Songs): Songs =>
     path: generatePath(number, title),
   }))
 
-const formatPoemsFolder = (books: Poems): Poems =>
+const formatPoemsFolder = (books: Pieces): Pieces =>
   books.map(({ number, title, description, content }) => ({
     number,
     title,
@@ -88,35 +88,27 @@ export const sortFoldersContent = (folders: Folders): Folders =>
       ),
   }))
 
-export const arrayFoldersContent = (content: Folders): Songs =>
+export const arrayFoldersContent = (content: Folders): Pieces =>
   content.map(({ files }) => files).reduce((a, b) => [...a, ...b], [])
 
-type Song = {
+export type Piece = {
   number: number
   title: string
+  description?: string
   content: string
   path: string
 }
-type Songs = Song[]
-type Poem = {
-  number: number
-  title: string
-  description: string
-  content: string
-  path: string
-}
-type Poems = Poem[]
-type PoemsRaw = { [title: string]: { books: Poems } }
+type Pieces = Piece[]
+type PoemsRaw = { [title: string]: { books: Pieces } }
 type ContentRaw = {
-  saCantamDomnului: Songs
-  alteCantari: Songs
-  colinde: Songs
+  saCantamDomnului: Pieces
+  alteCantari: Pieces
+  colinde: Pieces
   poezii: PoemsRaw
 }
-export type File = Song | Poem
 export type Folder = {
   title: string
-  files: File[]
+  files: Pieces
 }
 type Folders = Folder[]
 export type ContentFormatted = {

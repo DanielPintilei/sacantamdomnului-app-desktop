@@ -3094,6 +3094,10 @@ rcedit@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/rcedit/-/rcedit-1.0.0.tgz#43309ecbc8814f3582fca6b751748cfad66a16a2"
 
+re-resizable@^4.4.4:
+  version "4.4.4"
+  resolved "https://registry.yarnpkg.com/re-resizable/-/re-resizable-4.4.4.tgz#94cf3f85826ed3ba3bf10e9a48a07760b276f4e7"
+
 react-dom@^16.2.0:
   version "16.2.0"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.2.0.tgz#69003178601c0ca19b709b33a83369fe6124c044"
