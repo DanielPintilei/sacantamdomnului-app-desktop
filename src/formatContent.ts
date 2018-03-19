@@ -27,7 +27,11 @@ const formatSongContent = (songContent: string) => {
   return formatted
 }
 
-const formatStanzas = (content: string): string[] => {
+const formatStanzas = (
+  number: number | string,
+  title: string,
+  content: string,
+): string[] => {
   const contentWithRefrenNormalized = content.replace('Refren\n\n', 'Refren\n')
   const contentMatchRefren = contentWithRefrenNormalized.match(refren)
   const contentTrimmed = contentWithRefrenNormalized
@@ -45,13 +49,14 @@ const formatStanzas = (content: string): string[] => {
   const stanzas = contentSplit.map(stanza => {
     return formatStanza(stanza)
   })
+  stanzas[0] = `<h1>${number}. ${title}</h1>${stanzas[0]}`
   const addEnding = (stanzaArray: string[]): string[] =>
     stanzaArray.map((stanza, index) => {
-      if (stanzaArray.length - 1 === index) return stanza + '\n\nAmin'
+      if (stanzaArray.length - 1 === index) return stanza + '\n\n<p>Amin</p>'
       return stanza
     })
   if (contentMatchRefren) {
-    const formattedRefren = formatStanza(contentMatchRefren[1])
+    const formattedRefren = formatStanza(`<em>${contentMatchRefren[1]}</em>`)
     const stanzasWithRefren = stanzas.reduce(
       (arr, next) => [...arr, next, formattedRefren],
       [],
@@ -67,7 +72,7 @@ const formatSongs = (songs: Pieces): Pieces =>
     title,
     content: formatSongContent(content),
     path: generatePath(number, title),
-    stanzas: formatStanzas(content),
+    stanzas: formatStanzas(number, title, content),
   }))
 
 const formatPoemsFolder = (books: Pieces): Pieces =>
@@ -77,7 +82,7 @@ const formatPoemsFolder = (books: Pieces): Pieces =>
     description,
     content,
     path: generatePath(number, title),
-    stanzas: formatStanzas(content),
+    stanzas: formatStanzas(number, title, content),
   }))
 
 const formatPoemsFolders = (poems: PoemsRaw): Folders =>

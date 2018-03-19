@@ -26,7 +26,7 @@ class App extends React.Component {
         <Wrapper>
           <Index content={content} />
           <Main contentArray={contentArray} />
-          <ControlPanel />
+          <ControlPanel contentArray={contentArray} />
         </Wrapper>
       </Router>
     )

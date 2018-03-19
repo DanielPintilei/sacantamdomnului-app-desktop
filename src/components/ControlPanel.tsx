@@ -1,8 +1,9 @@
 import * as React from 'react'
 import { ipcRenderer } from 'electron'
-// import { Link } from 'react-router-dom'
+import { withRouter, Link } from 'react-router-dom'
 import styled from 'styled-components'
 import * as Resizable from 're-resizable'
+import { Piece } from '../formatContent'
 import {
   IconNew,
   IconPresent,
@@ -58,14 +59,86 @@ const Form = styled.form`
   }
 `
 type SearchProps = {
-  // content: ContentFormatted
+  location: { pathname: string }
+  contentArray: Piece[]
 }
-class ControlPanel extends React.Component<SearchProps> {
+type SearchState = {
+  width: number
+  activeStanzas: string[]
+  activeStanza: number
+}
+class ControlPanel extends React.Component<SearchProps, SearchState> {
+  searchInput: HTMLInputElement | null
   state = {
     width: 340,
+    activeStanzas: [],
+    activeStanza: 0,
+  }
+  getFirstStanza = () => {
+    const { pathname } = this.props.location
+    const activePiece = this.props.contentArray.find(
+      item => `/${item.path}` === pathname,
+    )
+    if (activePiece) {
+      const { stanzas } = activePiece
+      this.setState({ activeStanzas: stanzas, activeStanza: 0 })
+      return stanzas[0]
+    }
+    return ''
+  }
+  openPresentation = () => {
+    ipcRenderer.send('openPresentation', this.getFirstStanza())
+  }
+  startPresentation = () => {
+    ipcRenderer.send('setStanza', this.getFirstStanza())
+  }
+  closePresentations() {
+    ipcRenderer.send('closePresentations')
+  }
+  resetPresentation() {
+    ipcRenderer.send('setStanza', '')
+  }
+  changeStanza = (isPrev?: boolean) => {
+    const { activeStanza } = this.state
+    const sendState = (nextActiveStanza: number) =>
+      this.setState(prevState => {
+        const stanza = prevState.activeStanzas[nextActiveStanza]
+        ipcRenderer.send('setStanza', stanza)
+        return { activeStanza: nextActiveStanza }
+      })
+    const prevGuard = activeStanza !== 0
+    const nextGuard = activeStanza !== this.state.activeStanzas.length - 1
+    if (isPrev) {
+      if (prevGuard) sendState(activeStanza - 1)
+    } else if (nextGuard) sendState(activeStanza + 1)
+  }
+  componentDidMount() {
+    const handleKeydown = (code: string) => {
+      switch (code) {
+        case 'Enter':
+          this.startPresentation()
+          break
+        case 'Escape':
+          this.resetPresentation()
+          break
+        case 'ArrowLeft':
+        case 'ArrowDown':
+          this.changeStanza(true)
+          break
+        case 'ArrowRight':
+        case 'ArrowUp':
+          this.changeStanza()
+          break
+      }
+    }
+    document.addEventListener('keydown', ev => {
+      if (document.activeElement !== this.searchInput) handleKeydown(ev.code)
+    })
+    ipcRenderer.on('receivePresentationKeydown', (_: any, payload: string) =>
+      handleKeydown(payload),
+    )
   }
   render() {
-    // const { content: { songs, poems } } = this.props
     const { width } = this.state
     return (
       <div>
@@ -87,26 +160,24 @@ class ControlPanel extends React.Component<SearchProps> {
           <Wrapper>
             <Controls>
               <nav>
-                <button
-                  onClick={() => ipcRenderer.send('openPresentation', '')}
-                >
+                <button onClick={this.openPresentation}>
                   <IconNew />
                 </button>
-                <button onClick={() => ipcRenderer.send('setStanza', '')}>
+                <button onClick={this.startPresentation}>
                   <IconPresent />
                 </button>
-                <button onClick={() => ipcRenderer.send('closePresentations')}>
+                <button onClick={this.closePresentations}>
                   <IconClose />
                 </button>
               </nav>
               <nav>
-                <button onClick={() => ipcRenderer.send('setStanza', '')}>
+                <button onClick={() => this.changeStanza(true)}>
                   <IconArrowLeft />
                 </button>
-                <button onClick={() => ipcRenderer.send('setStanza', '')}>
+                <button onClick={this.resetPresentation}>
                   <IconBlank />
                 </button>
-                <button onClick={() => ipcRenderer.send('setStanza', '')}>
+                <button onClick={() => this.changeStanza()}>
                   <IconArrowRight />
                 </button>
               </nav>
@@ -114,7 +185,12 @@ class ControlPanel extends React.Component<SearchProps> {
             <Form>
               <label>
                 <IconSearch />
-                <input type="search" />
+                <input
+                  type="search"
+                  ref={element => {
+                    this.searchInput = element
+                  }}
+                />
               </label>
             </Form>
           </Wrapper>
@@ -124,4 +200,4 @@ class ControlPanel extends React.Component<SearchProps> {
   }
 }
 
-export default ControlPanel
+export default withRouter<any>(ControlPanel)

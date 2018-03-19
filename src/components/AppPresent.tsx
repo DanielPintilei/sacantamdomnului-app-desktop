@@ -9,11 +9,33 @@ const Wrapper = styled.div`
   right: 5px;
   bottom: 5px;
   left: 5px;
-  font-size: 32px;
-  color: #fff;
+  display: flex;
   background-color: #000;
   user-select: none;
   -webkit-app-region: drag;
+  pre {
+    white-space: pre-wrap;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
+      'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
+      'Helvetica Neue', sans-serif;
+    font-size: 40px;
+    line-height: 1.4;
+    tab-size: 0;
+    color: #fff;
+    &,
+    p {
+      margin: 0;
+    }
+    h1 {
+      margin: 0 0 1em;
+      font-size: 1.2em;
+      font-weight: normal;
+      line-height: 1.2;
+    }
+    p {
+      text-align: center;
+    }
+  }
 `
 
 class AppPresent extends React.Component {
@@ -21,9 +43,11 @@ class AppPresent extends React.Component {
     stanza: '',
   }
   componentDidMount() {
+    document.addEventListener('keydown', ev =>
+      ipcRenderer.send('presentationKeydown', ev.code),
+    )
     const setState = (_: any, payload: string) => {
       this.setState({ stanza: payload })
-      console.log(payload)
     }
     ipcRenderer.on('openPresentation', setState)
     ipcRenderer.on('setStanza', setState)
@@ -32,7 +56,7 @@ class AppPresent extends React.Component {
     const { stanza } = this.state
     return (
       <Wrapper>
-        <div>{stanza}</div>
+        <pre dangerouslySetInnerHTML={{ __html: stanza }} />
       </Wrapper>
     )
   }

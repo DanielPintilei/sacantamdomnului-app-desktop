@@ -71,6 +71,9 @@ ipcMain.on('setStanza', (_, payload) => {
   setStatePresentWindows(payload)
 })
 ipcMain.on('closePresentations', closePresentWindows)
+ipcMain.on('presentationKeydown', (_, payload) =>
+  mainWindow.webContents.send('receivePresentationKeydown', payload),
+)
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
