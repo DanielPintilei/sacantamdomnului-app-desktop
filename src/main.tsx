@@ -7,6 +7,9 @@ injectGlobal`
   * {
     box-sizing: border-box;
   }
+  body {
+    border-left: 10px solid #f1f1f1;
+  }
   body,
   pre {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -28,6 +31,17 @@ injectGlobal`
     &:active {
       transform: scale(0.9);
     }
+  }
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track,
+  ::-webkit-scrollbar-corner {
+    background-color: #f1f1f1;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: hsla(0, 0%, 0%, 0.1);
   }
 `
 

@@ -115,7 +115,7 @@ const Folders = ({ folders }: any) =>
 const Wrapper = styled.div`
   height: 100vh;
   padding: 10px 0 10px 4px;
-  overflow-y: scroll;
+  overflow: scroll;
 `
 type IndexProps = {
   content: ContentFormatted
@@ -130,7 +130,7 @@ class Index extends React.Component<IndexProps> {
     return (
       <div>
         <Resizable
-          size={{ width, height: '100vh' }}
+          size={{ width, height: '100%' }}
           onResizeStop={(
             e: any,
             direction: any,
@@ -142,7 +142,7 @@ class Index extends React.Component<IndexProps> {
             })
           }}
           enable={{ right: true }}
-          minWidth={0}
+          minWidth={10}
         >
           <Wrapper>
             <Folder title={songs.title} defaultOpen>

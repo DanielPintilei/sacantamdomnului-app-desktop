@@ -16,7 +16,7 @@ import {
 
 const Wrapper = styled.div`
   height: 100vh;
-  overflow-y: scroll;
+  overflow: scroll;
 `
 const Controls = styled.div`
   padding-right: 20px;
@@ -143,7 +143,7 @@ class ControlPanel extends React.Component<SearchProps, SearchState> {
     return (
       <div>
         <Resizable
-          size={{ width, height: '100vh' }}
+          size={{ width, height: '100%' }}
           onResizeStop={(
             e: any,
             direction: any,
@@ -155,7 +155,7 @@ class ControlPanel extends React.Component<SearchProps, SearchState> {
             })
           }}
           enable={{ left: true }}
-          minWidth={0}
+          minWidth={10}
         >
           <Wrapper>
             <Controls>
@@ -200,4 +200,4 @@ class ControlPanel extends React.Component<SearchProps, SearchState> {
   }
 }
 
-export default withRouter<any>(ControlPanel)
+export default withRouter<any>(ControlPanel) as any
