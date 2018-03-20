@@ -17,7 +17,7 @@ const melodie = /(Melodie:(.*)\n)/
 
 const formatSongContent = (songContent: string) => {
   const formatted = songContent
-    .replace('Refren\n\n', 'Refren\n')
+    .replace(/Refren\n\n/g, 'Refren\n')
     .replace(refrenGlobal, '<em>$1</em>\n\n')
     .replace(autor, '<small>$1</small>')
     .replace(melodie, '<small>$1</small>')
@@ -29,11 +29,11 @@ const formatSongContent = (songContent: string) => {
 }
 
 const formatStanzas = (
-  number: number | string,
   title: string,
   content: string,
+  number?: number | string,
 ): string[] => {
-  const contentWithRefrenNormalized = content.replace('Refren\n\n', 'Refren\n')
+  const contentWithRefrenNormalized = content.replace(/Refren\n\n/g, 'Refren\n')
   const contentMatchRefren = contentWithRefrenNormalized.match(refrenGlobal)
   const contentMatchRefrenIsMultipe =
     contentMatchRefren && contentMatchRefren.length > 1
@@ -52,17 +52,19 @@ const formatStanzas = (
   const stanzas = contentSplit.map(stanza => {
     return formatStanza(stanza)
   })
-  stanzas[0] = `<h1>${number}. ${title}</h1>${stanzas[0]}`
-  const addEnding = (stanzaArray: string[]): string[] =>
-    stanzaArray.map((stanza, index) => {
+  stanzas[0] = `<h1>${number ? number + '. ' : ''}${title}</h1>${stanzas[0]}`
+  const addEnding = (stanzaArray: string[]): string[] => [
+    ...stanzaArray.map((stanza, index) => {
       if (stanzaArray.length - 1 === index) return stanza + '\n\n<p>Amin</p>'
       return stanza
-    })
+    }),
+    '',
+  ]
   if (
     !contentMatchRefren ||
     (contentMatchRefren && contentMatchRefrenIsMultipe)
   ) {
-    return [...addEnding(stanzas), '']
+    return addEnding(stanzas)
   } else {
     const contentMatchRefrenSingle = contentWithRefrenNormalized.match(refren)!
     const formattedRefren = formatStanza(
@@ -72,17 +74,17 @@ const formatStanzas = (
       (arr, next) => [...arr, next, formattedRefren],
       [],
     )
-    return [...addEnding(stanzasWithRefren), '']
+    return addEnding(stanzasWithRefren)
   }
 }
 
-const formatSongs = (songs: Pieces): Pieces =>
+const formatSongs = (songs: Pieces, displayNumber?: boolean): Pieces =>
   songs.filter(x => x).map(({ number, title, content }) => ({
     number,
     title,
     content: formatSongContent(content),
     path: generatePath(number, title),
-    stanzas: formatStanzas(number, title, content),
+    stanzas: formatStanzas(title, content, displayNumber ? number : undefined),
   }))
 
 const formatPoemsFolder = (books: Pieces): Pieces =>
@@ -92,7 +94,7 @@ const formatPoemsFolder = (books: Pieces): Pieces =>
     description,
     content,
     path: generatePath(number, title),
-    stanzas: formatStanzas(number, title, content),
+    stanzas: formatStanzas(title, content),
   }))
 
 const formatPoemsFolders = (poems: PoemsRaw): Folders =>
@@ -112,7 +114,7 @@ const formatContent = ({
     folders: [
       {
         title: 'Să cântăm Domnului',
-        files: formatSongs(saCantamDomnului),
+        files: formatSongs(saCantamDomnului, true),
       },
       {
         title: 'Alte Cântări',
