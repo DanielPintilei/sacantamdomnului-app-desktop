@@ -74,20 +74,21 @@ class ControlPanel extends React.Component<SearchProps, SearchState> {
     activeStanzas: [],
     activeStanza: 0,
   }
-  getFirstStanza = () => {
+  getFirstStanza = (getStanzaFromState?: boolean) => {
     const { pathname } = this.props.location
     const activePiece = this.props.contentArray.find(
       item => `/${item.path}` === pathname,
     )
     if (activePiece) {
       const { stanzas } = activePiece
-      this.setState({ activeStanzas: stanzas, activeStanza: 0 })
-      return stanzas[0]
+      const activeStanza = getStanzaFromState ? this.state.activeStanza : 0
+      this.setState({ activeStanzas: stanzas, activeStanza })
+      return stanzas[activeStanza]
     }
     return ''
   }
   openPresentation = () => {
-    ipcRenderer.send('openPresentation', this.getFirstStanza())
+    ipcRenderer.send('openPresentation', this.getFirstStanza(true))
   }
   startPresentation = () => {
     ipcRenderer.send('setStanza', this.getFirstStanza())
@@ -115,6 +116,9 @@ class ControlPanel extends React.Component<SearchProps, SearchState> {
   componentDidMount() {
     const handleKeydown = (code: string) => {
       switch (code) {
+        case 'F5':
+          this.openPresentation()
+          break
         case 'Enter':
           this.startPresentation()
           break

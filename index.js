@@ -9,7 +9,7 @@ require('electron-debug')()
 // Prevent window being garbage collected
 let mainWindow
 let presentWindows = []
-let presentWindowsId = 0
+let presentWindowsCount = 0
 
 function onClosed() {
   // Dereference the window
@@ -61,7 +61,7 @@ function createPresentWindow(initialState, id) {
 }
 
 ipcMain.on('openPresentation', (_, payload) => {
-  const id = presentWindowsId++
+  const id = presentWindowsCount++
   presentWindows.push({
     id,
     ref: createPresentWindow(payload, id),
@@ -92,8 +92,8 @@ const mainMenuTemplate = [
     label: 'View',
     submenu: [
       { role: 'resetzoom' },
-      { role: 'zoomin' },
-      { role: 'zoomout' },
+      { role: 'zoomin', accelerator: 'CmdOrCtrl+=' },
+      { role: 'zoomout', accelerator: 'CmdOrCtrl+-' },
       { type: 'separator' },
       { role: 'togglefullscreen' },
     ],

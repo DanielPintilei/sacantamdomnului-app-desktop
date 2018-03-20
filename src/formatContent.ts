@@ -11,13 +11,14 @@ const generatePath = (number: number, title: string) =>
   `${number}-${normalizeTitle(title)}`
 
 const refren = /Refren\n([^]*?)\n\n/
+const refrenGlobal = /Refren\n([^]*?)\n\n/g
 const autor = /(Versuri:(.*)\n)/
 const melodie = /(Melodie:(.*)\n)/
 
 const formatSongContent = (songContent: string) => {
   const formatted = songContent
     .replace('Refren\n\n', 'Refren\n')
-    .replace(refren, '<em>$1</em>\n\n')
+    .replace(refrenGlobal, '<em>$1</em>\n\n')
     .replace(autor, '<small>$1</small>')
     .replace(melodie, '<small>$1</small>')
     .replace(/\(bis\)/g, '<small>(bis)</small>')
@@ -33,9 +34,11 @@ const formatStanzas = (
   content: string,
 ): string[] => {
   const contentWithRefrenNormalized = content.replace('Refren\n\n', 'Refren\n')
-  const contentMatchRefren = contentWithRefrenNormalized.match(refren)
+  const contentMatchRefren = contentWithRefrenNormalized.match(refrenGlobal)
+  const contentMatchRefrenIsMultipe =
+    contentMatchRefren && contentMatchRefren.length > 1
   const contentTrimmed = contentWithRefrenNormalized
-    .replace(refren, '')
+    .replace(refrenGlobal, contentMatchRefrenIsMultipe ? '<em>$1</em>\n\n' : '')
     .replace(autor, '')
     .replace(melodie, '')
     .trim()
@@ -55,15 +58,22 @@ const formatStanzas = (
       if (stanzaArray.length - 1 === index) return stanza + '\n\n<p>Amin</p>'
       return stanza
     })
-  if (contentMatchRefren) {
-    const formattedRefren = formatStanza(`<em>${contentMatchRefren[1]}</em>`)
+  if (
+    !contentMatchRefren ||
+    (contentMatchRefren && contentMatchRefrenIsMultipe)
+  ) {
+    return [...addEnding(stanzas), '']
+  } else {
+    const contentMatchRefrenSingle = contentWithRefrenNormalized.match(refren)!
+    const formattedRefren = formatStanza(
+      `<em>${contentMatchRefrenSingle[1]}</em>`,
+    )
     const stanzasWithRefren = stanzas.reduce(
       (arr, next) => [...arr, next, formattedRefren],
       [],
     )
     return [...addEnding(stanzasWithRefren), '']
   }
-  return [...addEnding(stanzas), '']
 }
 
 const formatSongs = (songs: Pieces): Pieces =>

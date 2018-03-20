@@ -10,17 +10,20 @@ const Wrapper = styled.div`
   bottom: 5px;
   left: 5px;
   display: flex;
+  align-items: center;
+  justify-content: center;
   background-color: #000;
   user-select: none;
   -webkit-app-region: drag;
   pre {
-    white-space: pre-wrap;
+    max-height: 100%;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
       'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
       'Helvetica Neue', sans-serif;
     font-size: 40px;
     line-height: 1.4;
     tab-size: 0;
+    white-space: pre-wrap;
     color: #fff;
     &,
     p {
