@@ -3,6 +3,7 @@ import { ipcRenderer } from 'electron'
 import { withRouter, Link } from 'react-router-dom'
 import styled from 'styled-components'
 import * as Resizable from 're-resizable'
+import { replaceAccents } from '../formatContent'
 import { Piece } from '../formatContent'
 import {
   IconNew,
@@ -16,11 +17,18 @@ import {
 
 const Wrapper = styled.div`
   height: 100vh;
-  overflow: scroll;
+  overflow-x: scroll;
+  display: flex;
+  flex-direction: column;
+  & > * {
+    min-width: 250px;
+  }
 `
 const Controls = styled.div`
+  flex-shrink: 0;
   padding-right: 20px;
   padding-left: 20px;
+  overflow-y: scroll;
   nav {
     display: flex;
     justify-content: space-between;
@@ -38,8 +46,10 @@ const Controls = styled.div`
   }
 `
 const Form = styled.form`
+  flex-shrink: 0;
   padding-right: 36px;
   padding-left: 36px;
+  overflow-y: scroll;
   label {
     display: flex;
     align-items: center;
@@ -52,6 +62,7 @@ const Form = styled.form`
     }
     input {
       flex-grow: 1;
+      width: 100%;
       margin: 0;
       padding: 4px;
       font-size: 16px;
@@ -71,21 +82,46 @@ const Form = styled.form`
     }
   }
 `
-type SearchProps = {
+const Results = styled.div`
+  flex-grow: 1;
+  padding: 10px 32px;
+  overflow-y: scroll;
+  a {
+    display: flex;
+    padding: 4px 20px 4px 10px;
+    font-size: 15px;
+    text-decoration: none;
+    color: #000;
+    &:hover {
+      background-color: hsla(0, 0%, 0%, 0.05);
+    }
+    & > span {
+      margin-right: 5px;
+    }
+  }
+`
+type ControlPanelProps = {
   location: { pathname: string }
   contentArray: Piece[]
 }
-type SearchState = {
+type ControlPanelState = {
   width: number
   activeStanzas: string[]
   activeStanza: number
+  searchInputValue: string
+  searchResults: any[]
 }
-class ControlPanel extends React.Component<SearchProps, SearchState> {
+class ControlPanel extends React.Component<
+  ControlPanelProps,
+  ControlPanelState
+> {
   searchInput: HTMLInputElement | null
   state = {
     width: 340,
     activeStanzas: [],
     activeStanza: 0,
+    searchInputValue: '',
+    searchResults: [],
   }
   getFirstStanza = (getStanzaFromState?: boolean) => {
     const { pathname } = this.props.location
@@ -128,9 +164,49 @@ class ControlPanel extends React.Component<SearchProps, SearchState> {
       if (prevGuard) sendState(activeStanza - 1)
     } else if (nextGuard) sendState(activeStanza + 1)
   }
+  handleSearchInputChange = (event: { target: { value: string } }) => {
+    this.setState({ searchInputValue: event.target.value })
+  }
+  onSearchSubmit = (ev: { preventDefault: () => void }) => {
+    ev.preventDefault()
+    const { searchInputValue } = this.state
+    const searchResults = this.props.contentArray
+      .filter(({ number, title }) => {
+        const formattedTitle = replaceAccents(title).toLowerCase()
+        const searchText = new RegExp(`\\b${searchInputValue}`, 'ig')
+        return (
+          (searchInputValue &&
+            number.toString().startsWith(searchInputValue)) ||
+          ((formattedTitle
+            .replace(/[^\w\s]|_/g, '')
+            .replace(/\s+/g, ' ')
+            .match(searchText) ||
+            formattedTitle.match(searchText)) &&
+            searchInputValue.length > 1)
+        )
+      })
+      .sort((a, b) => a.number - b.number)
+      .map(({ number, title, path }) => (
+        <Link key={path} to={path}>
+          <span>{number}.</span>
+          {title}
+        </Link>
+      ))
+    this.setState({ searchResults })
+  }
+  focusSearchInput = () => {
+    const searchInput = this.searchInput
+    if (searchInput) {
+      searchInput.focus()
+      searchInput.select()
+    }
+  }
   componentDidMount() {
     const handleKeydown = (code: string) => {
       switch (code) {
+        case 'F3':
+          this.focusSearchInput()
+          break
         case 'F5':
           this.openPresentation()
           break
@@ -141,11 +217,9 @@ class ControlPanel extends React.Component<SearchProps, SearchState> {
           this.resetPresentation()
           break
         case 'ArrowLeft':
-        case 'ArrowDown':
           this.changeStanza(true)
           break
         case 'ArrowRight':
-        case 'ArrowUp':
           this.changeStanza()
           break
       }
@@ -158,7 +232,7 @@ class ControlPanel extends React.Component<SearchProps, SearchState> {
     )
   }
   render() {
-    const { width } = this.state
+    const { width, searchResults } = this.state
     return (
       <div>
         <Resizable
@@ -201,17 +275,20 @@ class ControlPanel extends React.Component<SearchProps, SearchState> {
                 </button>
               </nav>
             </Controls>
-            <Form>
+            <Form onSubmit={this.onSearchSubmit}>
               <label>
                 <IconSearch />
                 <input
                   type="search"
+                  value={this.state.searchInputValue}
+                  onChange={this.handleSearchInputChange}
                   ref={element => {
                     this.searchInput = element
                   }}
                 />
               </label>
             </Form>
+            {searchResults && <Results>{searchResults}</Results>}
           </Wrapper>
         </Resizable>
       </div>

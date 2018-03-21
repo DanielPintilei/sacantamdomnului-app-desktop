@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Link } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import styled from 'styled-components'
 import * as Resizable from 're-resizable'
 import { ContentFormatted, Piece, Folder as FolderType } from '../formatContent'
@@ -42,12 +42,19 @@ const FileWrapper = styled.div`
     }
   }
   a {
+    display: flex;
     padding: 4px 20px 4px 10px;
     font-size: 15px;
     text-decoration: none;
     color: #000;
     &:hover {
       background-color: hsla(0, 0%, 0%, 0.05);
+    }
+    &.active {
+      background-color: hsla(0, 0%, 0%, 0.07);
+    }
+    & > span {
+      margin-right: 5px;
     }
   }
 `
@@ -101,9 +108,15 @@ class Folder extends React.Component<FolderProps, FolderState> {
 
 const mapIndexLinks = (files: any[]) =>
   files.map((file: Piece) => (
-    <Link to={file.path} key={file.path}>
-      {file.number}. {file.title}
-    </Link>
+    <NavLink
+      to={file.path}
+      key={file.path}
+      activeClassName="active"
+      isActive={() => window.location.hash === `#/${file.path}`}
+    >
+      <span>{file.number}.</span>
+      {file.title}
+    </NavLink>
   ))
 const Folders = ({ folders }: any) =>
   folders.map((folder: FolderType) => (

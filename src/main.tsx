@@ -55,6 +55,10 @@ injectGlobal`
   ::-webkit-scrollbar-thumb {
     background-color: hsla(0, 0%, 0%, 0.1);
   }
+  ::selection {
+    color: #fff;
+    background-color: #000;
+  }
 `
 
 ReactDOM.render(<App />, document.getElementById('root') as HTMLElement)
