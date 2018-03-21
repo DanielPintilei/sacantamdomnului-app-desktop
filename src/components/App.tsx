@@ -1,5 +1,4 @@
 import * as React from 'react'
-// import { ipcRenderer } from 'electron'
 import { HashRouter as Router } from 'react-router-dom'
 import styled from 'styled-components'
 import Index from './Index'
@@ -18,6 +17,7 @@ const contentArray = arrayFoldersContent([
 
 const Wrapper = styled.div`
   display: flex;
+  background-color: #fff;
 `
 class App extends React.Component {
   render() {

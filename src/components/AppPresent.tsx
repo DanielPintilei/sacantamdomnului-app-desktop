@@ -17,8 +17,8 @@ const Wrapper = styled.div`
   -webkit-app-region: drag;
   pre {
     max-height: 100%;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
-      'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
+    font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+      'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
       'Helvetica Neue', sans-serif;
     font-size: 40px;
     line-height: 1.4;
@@ -34,6 +34,9 @@ const Wrapper = styled.div`
       font-size: 1.2em;
       font-weight: normal;
       line-height: 1.2;
+    }
+    small {
+      opacity: 0.7;
     }
     p {
       text-align: center;

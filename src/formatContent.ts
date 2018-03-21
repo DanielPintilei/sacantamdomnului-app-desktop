@@ -16,9 +16,13 @@ const autor = /(Versuri:(.*)\n)/
 const melodie = /(Melodie:(.*)\n)/
 
 const formatSongContent = (songContent: string) => {
+  const multipleRefrains = (songContent.match(refrenGlobal) || []).length > 1
   const formatted = songContent
     .replace(/Refren\n\n/g, 'Refren\n')
-    .replace(refrenGlobal, '<em>$1</em>\n\n')
+    .replace(
+      refrenGlobal,
+      multipleRefrains ? '<em>$1</em>\n\n' : '<em class="sticky">$1</em>\n\n',
+    )
     .replace(autor, '<small>$1</small>')
     .replace(melodie, '<small>$1</small>')
     .replace(/\(bis\)/g, '<small>(bis)</small>')
@@ -60,10 +64,7 @@ const formatStanzas = (
     }),
     '',
   ]
-  if (
-    !contentMatchRefren ||
-    (contentMatchRefren && contentMatchRefrenIsMultipe)
-  ) {
+  if (!contentMatchRefren || contentMatchRefrenIsMultipe) {
     return addEnding(stanzas)
   } else {
     const contentMatchRefrenSingle = contentWithRefrenNormalized.match(refren)!

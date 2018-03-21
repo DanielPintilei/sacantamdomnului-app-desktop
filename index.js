@@ -50,6 +50,7 @@ function createPresentWindow(initialState, id) {
     frame: false,
   })
   window.loadURL(`file://${__dirname}/present.html`)
+  window.setBackgroundColor('#000')
   window.once('ready-to-show', () => {
     setStatePresentWindows(initialState)
     window.show()

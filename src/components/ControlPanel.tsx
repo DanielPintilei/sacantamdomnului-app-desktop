@@ -38,10 +38,13 @@ const Controls = styled.div`
   }
 `
 const Form = styled.form`
-  padding: 14px 36px;
+  padding-right: 36px;
+  padding-left: 36px;
   label {
     display: flex;
     align-items: center;
+    padding-top: 14px;
+    padding-bottom: 14px;
     cursor: text;
     svg {
       flex-shrink: 0;
@@ -55,6 +58,16 @@ const Form = styled.form`
       border: none;
       border-bottom: 2px solid #000;
       outline: none;
+      ::-webkit-search-cancel-button {
+        position: relative;
+        left: 4px;
+        width: 18px;
+        height: 18px;
+        background-size: 18px;
+        background-position: center;
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>');
+        -webkit-appearance: none;
+      }
     }
   }
 `
@@ -93,11 +106,13 @@ class ControlPanel extends React.Component<SearchProps, SearchState> {
   startPresentation = () => {
     ipcRenderer.send('setStanza', this.getFirstStanza())
   }
-  closePresentations() {
+  closePresentations = () => {
     ipcRenderer.send('closePresentations')
+    this.setState({ activeStanza: 0 })
   }
-  resetPresentation() {
+  resetPresentation = () => {
     ipcRenderer.send('setStanza', '')
+    this.setState({ activeStanza: 0 })
   }
   changeStanza = (isPrev?: boolean) => {
     const { activeStanza } = this.state

@@ -44,8 +44,6 @@ const StyledPiece = styled.article`
       display: inline-block;
       width: 100%;
       margin-left: -4px;
-      position: sticky;
-      top: 0.5em;
       z-index: 1;
       font-style: italic;
       background-color: #fff;
@@ -60,11 +58,19 @@ const StyledPiece = styled.article`
       }
       &::before {
         top: -0.5em;
-        border-top: 1px solid lightgray;
+        border-top: 1px solid #fff;
       }
       &::after {
         bottom: -0.5em;
-        border-bottom: 1px solid lightgray;
+        border-bottom: 1px solid #fff;
+      }
+      &.sticky {
+        position: sticky;
+        top: 0.5em;
+        &::before,
+        &::after {
+          border-color: lightgray;
+        }
       }
     }
     small {
