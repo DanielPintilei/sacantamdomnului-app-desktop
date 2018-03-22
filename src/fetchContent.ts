@@ -14,7 +14,18 @@ type Snapshot = {
 const writeContent = (snapshot: Snapshot) => {
   const raw = snapshot.val()
   const content = JSON.stringify(raw)
-  fs.writeFileSync('./content.json', content)
+  const contentNormalized = content
+    .replace(/"comtent"/g, '"content"')
+    .replace(/"numar"/g, '"number"')
+    .replace(/\\n\\n \\n/g, '\\n\\n')
+    .replace(/\\n \\n/g, '\\n\\n')
+    .replace(/ã/g, 'ă')
+    .replace(/Ã/g, 'Ă]')
+    .replace(/ş/g, 'ș')
+    .replace(/Ş/g, 'Ș')
+    .replace(/ţ/g, 'ț')
+    .replace(/Ţ/g, 'Ț')
+  fs.writeFileSync('./content.json', contentNormalized)
   process.exit()
 }
 

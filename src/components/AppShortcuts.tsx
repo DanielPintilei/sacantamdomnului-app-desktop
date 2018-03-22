@@ -42,6 +42,9 @@ const Wrapper = styled.div`
     span {
       margin-left: auto;
     }
+    var {
+      opacity: 0.3;
+    }
   }
 `
 const AppShortcuts = () => (
@@ -98,17 +101,23 @@ const AppShortcuts = () => (
     <div>
       <i />
       Zoom In:<small />
-      <span>Ctrl+=</span>
+      <span>
+        Ctrl<var>+</var>=
+      </span>
     </div>
     <div>
       <i />
       Zoom Out:<small />
-      <span>Ctrl+-</span>
+      <span>
+        Ctrl<var>+</var>-
+      </span>
     </div>
     <div>
       <i />
       Zoom Reset:<small />
-      <span>Ctrl+0</span>
+      <span>
+        Ctrl<var>+</var>0
+      </span>
     </div>
     <div>
       <i />
@@ -128,7 +137,9 @@ const AppShortcuts = () => (
     <div>
       <i />
       Închidere fereastră:<small />
-      <span>Ctrl+W</span>
+      <span>
+        Ctrl<var>+</var>W
+      </span>
     </div>
   </Wrapper>
 )
