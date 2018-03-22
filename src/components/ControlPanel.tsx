@@ -1,6 +1,11 @@
 import * as React from 'react'
 import { ipcRenderer } from 'electron'
-import { withRouter, Link } from 'react-router-dom'
+import {
+  withRouter,
+  Link,
+  LinkProps,
+  RouteComponentProps,
+} from 'react-router-dom'
 import styled from 'styled-components'
 import * as Resizable from 're-resizable'
 import { replaceAccents } from '../formatContent'
@@ -26,6 +31,7 @@ const Wrapper = styled.div`
 `
 const Controls = styled.div`
   flex-shrink: 0;
+  padding-top: 15px;
   padding-right: 20px;
   padding-left: 20px;
   overflow-y: scroll;
@@ -100,8 +106,9 @@ const Results = styled.div`
     }
   }
 `
-type ControlPanelProps = {
+type ControlPanelProps = RouteComponentProps<{
   location: { pathname: string }
+}> & {
   contentArray: Piece[]
 }
 type ControlPanelState = {
@@ -109,7 +116,7 @@ type ControlPanelState = {
   activeStanzas: string[]
   activeStanza: number
   searchInputValue: string
-  searchResults: any[]
+  searchResults: React.ReactElement<LinkProps>[]
 }
 class ControlPanel extends React.Component<
   ControlPanelProps,
@@ -204,23 +211,26 @@ class ControlPanel extends React.Component<
   componentDidMount() {
     const handleKeydown = (code: string) => {
       switch (code) {
-        case 'F3':
-          this.focusSearchInput()
-          break
         case 'F5':
           this.openPresentation()
           break
         case 'Enter':
           this.startPresentation()
           break
-        case 'Escape':
-          this.resetPresentation()
+        case 'F8':
+          this.closePresentations()
           break
         case 'ArrowLeft':
           this.changeStanza(true)
           break
+        case 'Escape':
+          this.resetPresentation()
+          break
         case 'ArrowRight':
           this.changeStanza()
+          break
+        case 'F3':
+          this.focusSearchInput()
           break
       }
     }
@@ -296,4 +306,4 @@ class ControlPanel extends React.Component<
   }
 }
 
-export default withRouter<any>(ControlPanel) as any
+export default withRouter(ControlPanel)

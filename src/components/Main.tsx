@@ -43,7 +43,6 @@ const StyledPiece = styled.article`
     em {
       display: inline-block;
       width: 100%;
-      margin-left: -4px;
       z-index: 1;
       font-style: italic;
       background-color: #fff;
@@ -67,6 +66,7 @@ const StyledPiece = styled.article`
       &.sticky {
         position: sticky;
         top: 0.5em;
+        margin-left: -4px;
         &::before,
         &::after {
           border-color: lightgray;

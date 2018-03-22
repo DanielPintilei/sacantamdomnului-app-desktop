@@ -1,9 +1,9 @@
 import * as React from 'react'
 import { ipcRenderer } from 'electron'
 import styled from 'styled-components'
+import { fontFamilies } from '../fonts'
 
 const Wrapper = styled.div`
-  box-sizing: border-box;
   position: absolute;
   top: 5px;
   right: 5px;
@@ -17,9 +17,7 @@ const Wrapper = styled.div`
   -webkit-app-region: drag;
   pre {
     max-height: 100%;
-    font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI',
-      'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
-      'Helvetica Neue', sans-serif;
+    ${fontFamilies};
     font-size: 40px;
     line-height: 1.4;
     tab-size: 0;

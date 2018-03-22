@@ -17,7 +17,7 @@ const ButtonFolder = styled.button`
   text-align: left;
   .dots {
     width: 10px;
-    border-top: 1px dotted #000;
+    border-top: 1px dotted gray;
   }
   svg {
     margin-right: 5px;
@@ -27,7 +27,7 @@ const FileWrapper = styled.div`
   display: flex;
   flex-direction: column;
   margin-left: 21px;
-  border-left: 1px dotted #000;
+  border-left: 1px dotted gray;
   & > div:last-child button:not(.opened) {
     position: relative;
     &::before {
@@ -106,8 +106,8 @@ class Folder extends React.Component<FolderProps, FolderState> {
   }
 }
 
-const mapIndexLinks = (files: any[]) =>
-  files.map((file: Piece) => (
+const mapIndexLinks = (files: Piece[]) =>
+  files.map(file => (
     <NavLink
       to={file.path}
       key={file.path}
@@ -118,7 +118,8 @@ const mapIndexLinks = (files: any[]) =>
       {file.title}
     </NavLink>
   ))
-const Folders = ({ folders }: any) =>
+
+const Folders = ({ folders }: { folders: FolderType[] } & any) =>
   folders.map((folder: FolderType) => (
     <Folder title={folder.title} isSubfolder key={folder.title}>
       {mapIndexLinks(folder.files)}

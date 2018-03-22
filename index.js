@@ -19,14 +19,36 @@ function onClosed() {
 
 function createMainWindow() {
   const window = new BrowserWindow({
+    show: false,
     width: 1000,
     height: 800,
   })
   window.maximize()
   window.loadURL(`file://${__dirname}/main.html`)
+  window.once('ready-to-show', () => {
+    window.show()
+  })
   window.on('closed', () => {
     onClosed()
     app.quit()
+  })
+  return window
+}
+
+function createShortcutsWindow() {
+  const window = new BrowserWindow({
+    parent: mainWindow,
+    modal: true,
+    show: false,
+    width: 550,
+    height: 620,
+    minimizable: false,
+    maximizable: false,
+  })
+  window.loadURL(`file://${__dirname}/shortcuts.html`)
+  window.setMenu(null)
+  window.once('ready-to-show', () => {
+    window.show()
   })
   return window
 }
@@ -106,6 +128,12 @@ const mainMenuTemplate = [
   {
     role: 'help',
     submenu: [
+      {
+        label: 'Shortcuts',
+        click() {
+          createShortcutsWindow()
+        },
+      },
       {
         label: 'Learn More',
         click() {

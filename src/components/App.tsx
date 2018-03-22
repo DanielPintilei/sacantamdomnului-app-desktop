@@ -5,11 +5,9 @@ import Index from './Index'
 import Main from './Main'
 import ControlPanel from './ControlPanel'
 import formatContent, { arrayFoldersContent } from '../formatContent'
-// sortFoldersContent,
 
 const rawContent = require('../../content.json')
 const content = formatContent(rawContent)
-// const contentSorted = arrayFoldersContent(cantari.folders)
 const contentArray = arrayFoldersContent([
   ...content.songs.folders,
   ...content.poems.folders,
