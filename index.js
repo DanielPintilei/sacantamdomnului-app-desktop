@@ -166,20 +166,20 @@ autoUpdater.on('update-available', () => {
 })
 autoUpdater.on('update-not-available', () => {
   sendUpdateStatusToWindow(
-    'Update not available, you are using the latest version.',
+    'Update not available. You are using the latest version.',
     true,
   )
 })
 autoUpdater.on('error', err => {
   sendUpdateStatusToWindow(`Error in auto-updater: ${err}`, true)
 })
-autoUpdater.on('download-progress', progressObj => {
-  const logMessage = `Downloading: ${progressObj.percent}%`
+autoUpdater.on('download-progress', ({ percent }) => {
+  const logMessage = `Downloading: ${Math.floor(percent)}%`
   sendUpdateStatusToWindow(logMessage)
 })
 autoUpdater.on('update-downloaded', () => {
   sendUpdateStatusToWindow(
-    'Update downloaded, it will be installed next time the app is launched.',
+    'Update downloaded. It will be installed next time the app is launched.',
     true,
   )
 })
