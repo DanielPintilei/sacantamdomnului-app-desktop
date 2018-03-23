@@ -1,8 +1,6 @@
 'use strict'
 const electron = require('electron')
-const autoUpdater = require('electron-updater').autoUpdater
-
-autoUpdater.checkForUpdatesAndNotify()
+const { autoUpdater } = require('electron-updater')
 
 const { app, BrowserWindow, Menu, ipcMain } = electron
 
@@ -160,4 +158,5 @@ app.on('ready', () => {
   mainWindow = createMainWindow()
   const mainMenu = Menu.buildFromTemplate(mainMenuTemplate)
   Menu.setApplicationMenu(mainMenu)
+  autoUpdater.checkForUpdatesAndNotify()
 })
