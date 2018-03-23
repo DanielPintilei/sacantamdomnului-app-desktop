@@ -1,5 +1,8 @@
 'use strict'
 const electron = require('electron')
+const autoUpdater = require('electron-updater').autoUpdater
+
+autoUpdater.checkForUpdatesAndNotify()
 
 const { app, BrowserWindow, Menu, ipcMain } = electron
 

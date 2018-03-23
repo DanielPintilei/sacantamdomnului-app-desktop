@@ -12,10 +12,17 @@
     "dev": "tsc --watch",
     "start": "electron .",
     "predist": "tsc",
-    "dist": "electron-builder",
+    "dist": "npm run fetch-content && electron-builder",
     "fetch-content": "node scripts/fetchContent.js"
   },
+  "build": {
+    "appId": "com.sacantamdomnului.app",
+    "mac": {
+      "category": "public.app-category.utilities"
+    }
+  },
   "dependencies": {
+    "electron-updater": "^2.21.3",
     "re-resizable": "^4.4.4",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",

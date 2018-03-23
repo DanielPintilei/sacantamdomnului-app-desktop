@@ -4,7 +4,7 @@
     "module": "commonjs",
     "lib": ["dom", "dom.iterable", "esnext", "scripthost"],
     "target": "es6",
-    "outDir": "build",
+    "outDir": "js",
     "jsx": "react",
     "paths": {
       "*": ["node_modules/*"]
