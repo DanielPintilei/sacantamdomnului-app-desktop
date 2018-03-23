@@ -1,4 +1,4 @@
-if (process.env.NODE_ENV !== 'production') require('dotenv').config()
+require('dotenv').config()
 const fs = require('fs')
 const firebase = require('firebase')
 
@@ -8,10 +8,7 @@ const config = {
 }
 firebase.initializeApp(config)
 
-type Snapshot = {
-  val: () => object
-}
-const writeContent = (snapshot: Snapshot) => {
+const writeContent = snapshot => {
   const raw = snapshot.val()
   const content = JSON.stringify(raw)
   const contentNormalized = content
@@ -35,10 +32,10 @@ const getContent = () => {
     .ref()
     .child('cantari')
     .once('value')
-    .then((snapshot: Snapshot) => {
+    .then(snapshot => {
       writeContent(snapshot)
     })
-    .catch((err: any) => {
+    .catch(err => {
       console.log(err)
       process.exit(1)
     })

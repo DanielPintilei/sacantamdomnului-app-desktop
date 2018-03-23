@@ -7,6 +7,7 @@ import ControlPanel from './ControlPanel'
 import formatContent, { arrayFoldersContent } from '../formatContent'
 
 const rawContent = require('../../content.json')
+
 const content = formatContent(rawContent)
 const contentArray = arrayFoldersContent([
   ...content.songs.folders,

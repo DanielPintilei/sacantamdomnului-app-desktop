@@ -4,7 +4,7 @@ const electron = require('electron')
 const { app, BrowserWindow, Menu, ipcMain } = electron
 
 // Adds debug features like hotkeys for triggering dev tools and reload
-require('electron-debug')()
+// require('electron-debug')()
 
 // Prevent window being garbage collected
 let mainWindow
@@ -24,7 +24,7 @@ function createMainWindow() {
     height: 800,
   })
   window.maximize()
-  window.loadURL(`file://${__dirname}/main.html`)
+  window.loadURL(`file://${__dirname}/html/main.html`)
   window.once('ready-to-show', () => {
     window.show()
   })
@@ -45,7 +45,7 @@ function createShortcutsWindow() {
     minimizable: false,
     maximizable: false,
   })
-  window.loadURL(`file://${__dirname}/shortcuts.html`)
+  window.loadURL(`file://${__dirname}/html/shortcuts.html`)
   window.setMenu(null)
   window.once('ready-to-show', () => {
     window.show()
@@ -71,7 +71,7 @@ function createPresentWindow(initialState, id) {
     height: 800,
     frame: false,
   })
-  window.loadURL(`file://${__dirname}/present.html`)
+  window.loadURL(`file://${__dirname}/html/present.html`)
   window.setBackgroundColor('#000')
   window.once('ready-to-show', () => {
     setStatePresentWindows(initialState)
