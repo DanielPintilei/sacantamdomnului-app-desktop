@@ -171,7 +171,7 @@ autoUpdater.on('update-not-available', () => {
   )
 })
 autoUpdater.on('error', err => {
-  sendUpdateStatusToWindow(`Error in auto-updater: ${err}`)
+  sendUpdateStatusToWindow(`Error in auto-updater: ${err}`, true)
 })
 autoUpdater.on('download-progress', progressObj => {
   const logMessage = `Downloading: ${progressObj.percent}%`
