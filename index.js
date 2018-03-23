@@ -154,38 +154,39 @@ if (process.platform === 'darwin') {
   ]
 }
 
+const sendUpdateStatusToWindow = (text, isDone = false) => {
+  mainWindow.webContents.send('updateMessage', { text, isDone })
+}
+
+autoUpdater.on('checking-for-update', () => {
+  sendUpdateStatusToWindow('Checking for update...')
+})
+autoUpdater.on('update-available', () => {
+  sendUpdateStatusToWindow('Update available.')
+})
+autoUpdater.on('update-not-available', () => {
+  sendUpdateStatusToWindow(
+    'Update not available, you are using the latest version.',
+    true,
+  )
+})
+autoUpdater.on('error', err => {
+  sendUpdateStatusToWindow(`Error in auto-updater: ${err}`)
+})
+autoUpdater.on('download-progress', progressObj => {
+  const logMessage = `Downloading: ${progressObj.percent}%`
+  sendUpdateStatusToWindow(logMessage)
+})
+autoUpdater.on('update-downloaded', () => {
+  sendUpdateStatusToWindow(
+    'Update downloaded, it will be installed next time the app is launched.',
+    true,
+  )
+})
+
 app.on('ready', () => {
   mainWindow = createMainWindow()
   const mainMenu = Menu.buildFromTemplate(mainMenuTemplate)
   Menu.setApplicationMenu(mainMenu)
-})
-
-function sendStatusToWindow(text) {
-  mainWindow.webContents.send('message', text)
-}
-autoUpdater.on('checking-for-update', () => {
-  sendStatusToWindow('Checking for update...')
-})
-autoUpdater.on('update-available', info => {
-  sendStatusToWindow('Update available.')
-})
-autoUpdater.on('update-not-available', info => {
-  sendStatusToWindow('Update not available.')
-})
-autoUpdater.on('error', err => {
-  sendStatusToWindow('Error in auto-updater. ' + err)
-})
-autoUpdater.on('download-progress', progressObj => {
-  let log_message = 'Download speed: ' + progressObj.bytesPerSecond
-  log_message = log_message + ' - Downloaded ' + progressObj.percent + '%'
-  log_message =
-    log_message + ' (' + progressObj.transferred + '/' + progressObj.total + ')'
-  sendStatusToWindow(log_message)
-})
-autoUpdater.on('update-downloaded', info => {
-  sendStatusToWindow('Update downloaded')
-})
-
-app.on('ready', function() {
   autoUpdater.checkForUpdatesAndNotify()
 })

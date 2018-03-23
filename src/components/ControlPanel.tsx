@@ -106,6 +106,17 @@ const Results = styled.div`
     }
   }
 `
+const UpdateMessage = styled.div`
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  width: 250px;
+  padding: 15px;
+  text-align: center;
+  background-color: #c6ff00;
+  border-radius: 3px;
+  box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.2);
+`
 type ControlPanelProps = RouteComponentProps<{
   location: { pathname: string }
 }> & {
@@ -117,6 +128,7 @@ type ControlPanelState = {
   activeStanza: number
   searchInputValue: string
   searchResults: React.ReactElement<LinkProps>[]
+  updateMessage: string
 }
 class ControlPanel extends React.Component<
   ControlPanelProps,
@@ -129,6 +141,7 @@ class ControlPanel extends React.Component<
     activeStanza: 0,
     searchInputValue: '',
     searchResults: [],
+    updateMessage: '',
   }
   getFirstStanza = (getStanzaFromState?: boolean) => {
     const { pathname } = this.props.location
@@ -240,15 +253,16 @@ class ControlPanel extends React.Component<
     ipcRenderer.on('receivePresentationKeydown', (_: any, payload: string) =>
       handleKeydown(payload),
     )
-    ipcRenderer.on('message', function(event: any, text: any) {
-      var container = document.getElementById('messages')!
-      var message = document.createElement('div')
-      message.innerHTML = text
-      container.appendChild(message)
-    })
+    ipcRenderer.on(
+      'updateMessage',
+      (_: any, { text, isDone }: { text: string; isDone: boolean }) => {
+        this.setState({ updateMessage: text })
+        if (isDone) setTimeout(() => this.setState({ updateMessage: '' }), 4000)
+      },
+    )
   }
   render() {
-    const { width, searchResults } = this.state
+    const { width, searchResults, updateMessage } = this.state
     return (
       <div>
         <Resizable
@@ -304,9 +318,8 @@ class ControlPanel extends React.Component<
                 />
               </label>
             </Form>
-            123
-            <div id="messages" />
             {searchResults && <Results>{searchResults}</Results>}
+            {updateMessage && <UpdateMessage>{updateMessage}</UpdateMessage>}
           </Wrapper>
         </Resizable>
       </div>
