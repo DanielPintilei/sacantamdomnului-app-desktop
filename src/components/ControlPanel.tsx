@@ -240,6 +240,12 @@ class ControlPanel extends React.Component<
     ipcRenderer.on('receivePresentationKeydown', (_: any, payload: string) =>
       handleKeydown(payload),
     )
+    ipcRenderer.on('message', function(event: any, text: any) {
+      var container = document.getElementById('messages')!
+      var message = document.createElement('div')
+      message.innerHTML = text
+      container.appendChild(message)
+    })
   }
   render() {
     const { width, searchResults } = this.state
@@ -298,6 +304,7 @@ class ControlPanel extends React.Component<
                 />
               </label>
             </Form>
+            <div id="messages" />
             {searchResults && <Results>{searchResults}</Results>}
           </Wrapper>
         </Resizable>
