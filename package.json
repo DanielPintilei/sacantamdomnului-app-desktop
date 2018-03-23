@@ -1,7 +1,7 @@
 {
   "name": "sacantamdomnului-app-desktop",
   "productName": "Să cântăm Domnului",
-  "version": "0.1.1",
+  "version": "0.1.3",
   "description": "Carte de cântări a Oastei Domnului",
   "author": {
     "name": "Daniel Pintilei",
@@ -12,9 +12,9 @@
     "dev": "tsc --watch",
     "start": "electron .",
     "predist": "tsc",
-    "dist-fetch": "npm run fetch-content && electron-builder",
-    "dist": "build -p always",
-    "fetch-content": "node scripts/fetchContent.js"
+    "dist": "electron-builder",
+    "fetch-content": "node scripts/fetchContent.js",
+    "gh-publish": "electron-builder -p always"
   },
   "build": {
     "publish": [
