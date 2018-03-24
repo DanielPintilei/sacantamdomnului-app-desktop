@@ -111,12 +111,14 @@ const UpdateMessage = styled.div`
   bottom: 20px;
   right: 20px;
   width: 250px;
+  max-height: 200px;
   padding: 15px;
   text-align: center;
   color: #4d4d4d;
   background-color: #c6ff00;
   border-radius: 3px;
   box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.2);
+  overflow-y: auto;
 `
 type ControlPanelProps = RouteComponentProps<{
   location: { pathname: string }
@@ -261,6 +263,13 @@ class ControlPanel extends React.Component<
         if (isDone) setTimeout(() => this.setState({ updateMessage: '' }), 7000)
       },
     )
+    const LOCAL_STORAGE_ALERT = 'LOCAL_STORAGE_ALERT'
+    if (!localStorage.getItem(LOCAL_STORAGE_ALERT)) {
+      alert(
+        'Slăvit să fie Domnul. Cu ajutorul Lui, aplicația va avea update-uri. Acestea se vor face automat la deschidere dacă va exista conexiune la internet.',
+      )
+      localStorage.setItem(LOCAL_STORAGE_ALERT, 'true')
+    }
   }
   render() {
     const { width, searchResults, updateMessage } = this.state
