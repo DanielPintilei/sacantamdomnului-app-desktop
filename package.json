@@ -1,7 +1,7 @@
 {
   "name": "sacantamdomnului-app-desktop",
   "productName": "Să cântăm Domnului",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Carte de cântări a Oastei Domnului",
   "author": {
     "name": "Daniel Pintilei",
@@ -11,8 +11,7 @@
   "scripts": {
     "dev": "tsc --watch",
     "start": "electron .",
-    "predist": "tsc",
-    "dist": "electron-builder",
+    "dist": "tsc && electron-builder",
     "fetch-content": "node scripts/fetchContent.js",
     "gh-publish": "tsc && electron-builder -p always"
   },
@@ -21,12 +20,16 @@
       {
         "provider": "github",
         "owner": "DanielPintilei",
-        "repo": "sacantamdomnului-app-desktop"
+        "repo": "sacantamdomnului-app-desktop",
+        "releaseType": "release"
       }
     ],
     "appId": "com.github.DanielPintilei.sacantamdomnului",
     "mac": {
       "category": "public.app-category.utilities"
+    },
+    "nsis": {
+      "perMachine": true
     }
   },
   "dependencies": {

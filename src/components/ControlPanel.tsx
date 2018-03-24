@@ -113,6 +113,7 @@ const UpdateMessage = styled.div`
   width: 250px;
   padding: 15px;
   text-align: center;
+  color: #4d4d4d;
   background-color: #c6ff00;
   border-radius: 3px;
   box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.2);
@@ -257,7 +258,7 @@ class ControlPanel extends React.Component<
       'updateMessage',
       (_: any, { text, isDone }: { text: string; isDone: boolean }) => {
         this.setState({ updateMessage: text })
-        if (isDone) setTimeout(() => this.setState({ updateMessage: '' }), 4000)
+        if (isDone) setTimeout(() => this.setState({ updateMessage: '' }), 7000)
       },
     )
   }
