@@ -179,7 +179,7 @@ autoUpdater.on('download-progress', ({ percent }) => {
 })
 autoUpdater.on('update-downloaded', () => {
   sendUpdateStatusToWindow(
-    'Update downloaded. It will be installed next time the app is launched.',
+    'Update downloaded. It will be installed the next time the app is launched.',
     true,
   )
 })

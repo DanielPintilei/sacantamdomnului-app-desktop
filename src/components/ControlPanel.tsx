@@ -266,7 +266,7 @@ class ControlPanel extends React.Component<
     const LOCAL_STORAGE_ALERT = 'LOCAL_STORAGE_ALERT'
     if (!localStorage.getItem(LOCAL_STORAGE_ALERT)) {
       alert(
-        'Slăvit să fie Domnul. Cu ajutorul Lui, aplicația va avea update-uri. Acestea se vor face automat la deschidere dacă va exista conexiune la internet.',
+        'Slăvit să fie Domnul.\n\nCu ajutorul Lui, aplicația va avea update-uri.\nAcestea se vor face automat la deschidere dacă va exista conexiune la internet.',
       )
       localStorage.setItem(LOCAL_STORAGE_ALERT, 'true')
     }
