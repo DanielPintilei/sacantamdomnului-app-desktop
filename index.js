@@ -138,7 +138,7 @@ const mainMenuTemplate = [
       {
         label: 'Learn More',
         click() {
-          require('electron').shell.openExternal('https://electronjs.org')
+          require('electron').shell.openExternal('https://www.sacantamdomnului-app.cf')
         },
       },
     ],
