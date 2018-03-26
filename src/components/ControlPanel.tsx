@@ -8,6 +8,7 @@ import {
 } from 'react-router-dom'
 import styled from 'styled-components'
 import * as Resizable from 're-resizable'
+import * as ReactTooltip from 'react-tooltip'
 import { replaceAccents } from '../formatContent'
 import { Piece } from '../formatContent'
 import {
@@ -27,6 +28,14 @@ const Wrapper = styled.div`
   flex-direction: column;
   & > * {
     min-width: 250px;
+  }
+  .tooltip {
+    display: flex;
+    justify-content: space-between;
+    span {
+      margin-left: 15px;
+      opacity: 0.7;
+    }
   }
 `
 const Controls = styled.div`
@@ -268,6 +277,7 @@ class ControlPanel extends React.Component<
       alert(
         'Slăvit să fie Domnul.\n\nCu ajutorul Lui, aplicația va avea update-uri.\nAcestea se vor face automat la deschidere dacă va exista conexiune la internet.',
       )
+      ipcRenderer.send('showShortcutsWindow')
       localStorage.setItem(LOCAL_STORAGE_ALERT, 'true')
     }
   }
@@ -291,32 +301,56 @@ class ControlPanel extends React.Component<
           minWidth={10}
         >
           <Wrapper>
+            <ReactTooltip
+              place="bottom"
+              effect="solid"
+              delayShow={1500}
+              html={true}
+            />
             <Controls>
               <nav>
-                <button onClick={this.openPresentation}>
+                <button
+                  onClick={this.openPresentation}
+                  data-tip="<span class='tooltip'>Deschidere fereastră de prezentare<span>F5</span></span>"
+                >
                   <IconNew />
                 </button>
-                <button onClick={this.startPresentation}>
+                <button
+                  onClick={this.startPresentation}
+                  data-tip="<span class='tooltip'>Afișare cântare curentă<span>Enter</span></span>"
+                >
                   <IconPresent />
                 </button>
-                <button onClick={this.closePresentations}>
+                <button
+                  onClick={this.closePresentations}
+                  data-tip="<span class='tooltip'>Închidere ferestre de prezentare<span>F8</span></span>"
+                >
                   <IconClose />
                 </button>
               </nav>
               <nav>
-                <button onClick={() => this.changeStanza(true)}>
+                <button
+                  onClick={() => this.changeStanza(true)}
+                  data-tip="<span class='tooltip'>Afișare strofă precedentă<span>Săgeată Stânga</span></span>"
+                >
                   <IconArrowLeft />
                 </button>
-                <button onClick={this.resetPresentation}>
+                <button
+                  onClick={this.resetPresentation}
+                  data-tip="<span class='tooltip'>Anulare afișare cântare curentă<span>Esc</span></span>"
+                >
                   <IconBlank />
                 </button>
-                <button onClick={() => this.changeStanza()}>
+                <button
+                  onClick={() => this.changeStanza()}
+                  data-tip="<span class='tooltip'>Afișare strofă următoare<span>Săgeată Dreapta</span></span>"
+                >
                   <IconArrowRight />
                 </button>
               </nav>
             </Controls>
             <Form onSubmit={this.onSearchSubmit}>
-              <label>
+              <label data-tip="<span class='tooltip'>Căutare<span>F3</span></span>">
                 <IconSearch />
                 <input
                   type="search"

@@ -98,6 +98,7 @@ ipcMain.on('closePresentations', closePresentWindows)
 ipcMain.on('presentationKeydown', (_, payload) =>
   mainWindow.webContents.send('receivePresentationKeydown', payload),
 )
+ipcMain.on('showShortcutsWindow', () => createShortcutsWindow())
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
@@ -138,7 +139,9 @@ const mainMenuTemplate = [
       {
         label: 'Learn More',
         click() {
-          require('electron').shell.openExternal('https://www.sacantamdomnului-app.cf')
+          require('electron').shell.openExternal(
+            'https://www.sacantamdomnului-app.cf',
+          )
         },
       },
     ],
