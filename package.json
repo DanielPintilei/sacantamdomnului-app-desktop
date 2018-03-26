@@ -1,7 +1,7 @@
 {
   "name": "sacantamdomnului-app-desktop",
   "productName": "Să cântăm Domnului",
-  "version": "0.3.5",
+  "version": "0.3.6",
   "description": "Carte de cântări a Oastei Domnului",
   "author": {
     "name": "Daniel Pintilei",
@@ -29,6 +29,9 @@
     },
     "nsis": {
       "perMachine": true
+    },
+    "linux": {
+      "target": "snap"
     }
   },
   "dependencies": {
