@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { NavLink } from 'react-router-dom'
 import styled from 'styled-components'
-import * as Resizable from 're-resizable'
+import Resizable from 're-resizable'
 import { ContentFormatted, Piece, Folder as FolderType } from '../formatContent'
 
 const FolderWrapper = styled.div`
@@ -139,7 +139,9 @@ class Index extends React.Component<IndexProps> {
     width: 340,
   }
   render() {
-    const { content: { songs, poems } } = this.props
+    const {
+      content: { songs, poems },
+    } = this.props
     const { width } = this.state
     return (
       <div>

@@ -80,13 +80,19 @@ const formatStanzas = (
 }
 
 const formatSongs = (songs: Pieces, displayNumber?: boolean): Pieces =>
-  songs.filter(x => x).map(({ number, title, content }) => ({
-    number,
-    title,
-    content: formatSongContent(content),
-    path: generatePath(number, title),
-    stanzas: formatStanzas(title, content, displayNumber ? number : undefined),
-  }))
+  songs
+    .filter(x => x)
+    .map(({ number, title, content }) => ({
+      number,
+      title,
+      content: formatSongContent(content),
+      path: generatePath(number, title),
+      stanzas: formatStanzas(
+        title,
+        content,
+        displayNumber ? number : undefined,
+      ),
+    }))
 
 const formatPoemsFolder = (books: Pieces): Pieces =>
   books.map(({ number, title, description, content }) => ({
@@ -156,7 +162,7 @@ export type Piece = {
 }
 type Pieces = Piece[]
 type PoemsRaw = { [title: string]: { books: Pieces } }
-type ContentRaw = {
+export type ContentRaw = {
   saCantamDomnului: Pieces
   alteCantari: Pieces
   colinde: Pieces

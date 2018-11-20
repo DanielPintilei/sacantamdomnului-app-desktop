@@ -7,8 +7,8 @@ import {
   RouteComponentProps,
 } from 'react-router-dom'
 import styled from 'styled-components'
-import * as Resizable from 're-resizable'
-import * as ReactTooltip from 'react-tooltip'
+import Resizable from 're-resizable'
+import ReactTooltip from 'react-tooltip'
 import { replaceAccents } from '../formatContent'
 import { Piece } from '../formatContent'
 import {
@@ -32,7 +32,7 @@ const Wrapper = styled.div`
   .tooltip {
     display: flex;
     justify-content: space-between;
-    span {
+    div {
       margin-left: 15px;
       opacity: 0.7;
     }
@@ -130,7 +130,7 @@ const UpdateMessage = styled.div`
   overflow-y: auto;
 `
 type ControlPanelProps = RouteComponentProps<{
-  location: { pathname: string }
+  location: string
 }> & {
   contentArray: Piece[]
 }
@@ -305,25 +305,26 @@ class ControlPanel extends React.Component<
               place="bottom"
               effect="solid"
               delayShow={1500}
+              className="tooltip"
               html={true}
             />
             <Controls>
               <nav>
                 <button
                   onClick={this.openPresentation}
-                  data-tip="<span class='tooltip'>Deschidere fereastră de prezentare<span>F5</span></span>"
+                  data-tip="Deschidere fereastră de prezentare<div>F5</div>"
                 >
                   <IconNew />
                 </button>
                 <button
                   onClick={this.startPresentation}
-                  data-tip="<span class='tooltip'>Afișare cântare curentă<span>Enter</span></span>"
+                  data-tip="Afișare cântare curentă<div>Enter</div>"
                 >
                   <IconPresent />
                 </button>
                 <button
                   onClick={this.closePresentations}
-                  data-tip="<span class='tooltip'>Închidere ferestre de prezentare<span>F8</span></span>"
+                  data-tip="Închidere ferestre de prezentare<div>F8</div>"
                 >
                   <IconClose />
                 </button>
@@ -331,26 +332,26 @@ class ControlPanel extends React.Component<
               <nav>
                 <button
                   onClick={() => this.changeStanza(true)}
-                  data-tip="<span class='tooltip'>Afișare strofă precedentă<span>Săgeată Stânga</span></span>"
+                  data-tip="Afișare strofă precedentă<div>Săgeată Stânga</div>"
                 >
                   <IconArrowLeft />
                 </button>
                 <button
                   onClick={this.resetPresentation}
-                  data-tip="<span class='tooltip'>Anulare afișare cântare curentă<span>Esc</span></span>"
+                  data-tip="Anulare afișare cântare curentă<div>Esc</div>"
                 >
                   <IconBlank />
                 </button>
                 <button
                   onClick={() => this.changeStanza()}
-                  data-tip="<span class='tooltip'>Afișare strofă următoare<span>Săgeată Dreapta</span></span>"
+                  data-tip="Afișare strofă următoare<div>Săgeată Dreapta</div>"
                 >
                   <IconArrowRight />
                 </button>
               </nav>
             </Controls>
             <Form onSubmit={this.onSearchSubmit}>
-              <label data-tip="<span class='tooltip'>Căutare<span>F3</span></span>">
+              <label data-tip="Căutare<div>F3</div>">
                 <IconSearch />
                 <input
                   type="search"
