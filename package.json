@@ -29,6 +29,9 @@
     },
     "nsis": {
       "perMachine": true
+    },
+    "linux": {
+      "target": "AppImage"
     }
   },
   "dependencies": {
