@@ -49,14 +49,21 @@ const Controls = styled.div`
     justify-content: space-between;
   }
   button {
+    flex-shrink: 0;
     display: flex;
+    flex-direction: column;
     align-items: center;
+    min-width: 70px;
     justify-content: center;
     margin: 4px;
     padding: 10px;
+    font-size: 10px;
     border-radius: 4px;
     &:hover {
       background-color: hsla(0, 0%, 0%, 0.05);
+    }
+    svg {
+      margin-bottom: 5px;
     }
   }
 `
@@ -315,18 +322,27 @@ class ControlPanel extends React.Component<
                   data-tip="Deschidere fereastră de prezentare<div>F5</div>"
                 >
                   <IconNew />
+                  Fereastră
+                  <br />
+                  nouă
                 </button>
                 <button
                   onClick={this.startPresentation}
                   data-tip="Afișare cântare curentă<div>Enter</div>"
                 >
                   <IconPresent />
+                  Afișare
+                  <br />
+                  cântare
                 </button>
                 <button
                   onClick={this.closePresentations}
                   data-tip="Închidere ferestre de prezentare<div>F8</div>"
                 >
                   <IconClose />
+                  Închidere
+                  <br />
+                  ferestre
                 </button>
               </nav>
               <nav>
@@ -335,18 +351,27 @@ class ControlPanel extends React.Component<
                   data-tip="Afișare strofă precedentă<div>Săgeată Stânga</div>"
                 >
                   <IconArrowLeft />
+                  Strofa
+                  <br />
+                  precedentă
                 </button>
                 <button
                   onClick={this.resetPresentation}
                   data-tip="Anulare afișare cântare curentă<div>Esc</div>"
                 >
                   <IconBlank />
+                  Anulare
+                  <br />
+                  afișare
                 </button>
                 <button
                   onClick={() => this.changeStanza()}
                   data-tip="Afișare strofă următoare<div>Săgeată Dreapta</div>"
                 >
                   <IconArrowRight />
+                  Strofa
+                  <br />
+                  următoare
                 </button>
               </nav>
             </Controls>

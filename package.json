@@ -32,7 +32,6 @@
     },
     "linux": {
       "target": "AppImage",
-      "executableName": "Să cântăm Domnului",
       "icon": "build/512x512.png"
     }
   },
