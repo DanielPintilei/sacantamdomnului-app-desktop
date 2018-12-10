@@ -3,7 +3,7 @@
     "baseUrl": ".",
     "module": "commonjs",
     "lib": ["dom", "dom.iterable", "esnext", "scripthost"],
-    "target": "es6",
+    "target": "es2018",
     "outDir": "js",
     "jsx": "react",
     "paths": {

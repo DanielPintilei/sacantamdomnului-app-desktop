@@ -83,11 +83,13 @@ type PieceProps = {
   contentArray: Piece[]
 }
 const Piece: React.StatelessComponent<PieceProps> = ({
-  match: { params: { path } },
+  match: {
+    params: { path },
+  },
   contentArray,
 }) => {
   const currentPiece = contentArray.find(piece => piece.path === path)!
-  if (currentPiece)
+  if (currentPiece) {
     return (
       <StyledPiece>
         <h1>
@@ -97,6 +99,7 @@ const Piece: React.StatelessComponent<PieceProps> = ({
         <pre dangerouslySetInnerHTML={{ __html: currentPiece.content }} />
       </StyledPiece>
     )
+  }
   return null
 }
 

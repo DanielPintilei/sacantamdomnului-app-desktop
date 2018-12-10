@@ -1,110 +1,120 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <title></title>
+    <style>
+      @font-face {
+        font-family: 'Open Sans';
+        font-weight: 400;
+        font-style: normal;
+        src: local('Open Sans Regular'), local('OpenSans-Regular'),
+          url('../fonts/Open_Sans/OpenSans-Regular.ttf') format('truetype');
+      }
+      @font-face {
+        font-family: 'Open Sans';
+        font-weight: 400;
+        font-style: italic;
+        src: local('Open Sans Italic'), local('OpenSans-Italic'),
+          url('../fonts/Open_Sans/OpenSans-Italic.ttf') format('truetype');
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background-color: #000;
+      }
+      ::-webkit-scrollbar {
+        width: 15px;
+        height: 15px;
+      }
+      ::-webkit-scrollbar-track,
+      ::-webkit-scrollbar-corner {
+        background-color: #000;
+      }
+      ::-webkit-scrollbar-thumb {
+        background-color: hsla(0, 0%, 100%, 0.2);
+      }
+      section {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        bottom: 5px;
+        left: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #000;
+        user-select: none;
+        -webkit-app-region: drag;
+      }
+      pre {
+        max-height: 100%;
+        font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+          'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
+          'Helvetica Neue', sans-serif;
+        font-size: 40px;
+        line-height: 1.4;
+        tab-size: 0;
+        white-space: pre-wrap;
+        color: #fff;
+      }
+      pre,
+      p {
+        margin: 0;
+      }
+      h1 {
+        margin: 0 0 0.5em;
+        font-size: 1.1em;
+        font-weight: normal;
+        line-height: 1.2;
+      }
+      small {
+        opacity: 0.7;
+      }
+      p {
+        text-align: center;
+      }
+    </style>
+  </head>
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title></title>
-  <style>
-    @font-face {
-      font-family: 'Open Sans';
-      font-weight: 400;
-      font-style: normal;
-      src: local('Open Sans Regular'), local('OpenSans-Regular'),
-      url('../fonts/Open_Sans/OpenSans-Regular.ttf') format('truetype');
-    }
-
-    @font-face {
-      font-family: 'Open Sans';
-      font-weight: 400;
-      font-style: italic;
-      src: local('Open Sans Italic'), local('OpenSans-Italic'),
-      url('../fonts/Open_Sans/OpenSans-Italic.ttf') format('truetype');
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      background-color: #000;
-    }
-
-    ::-webkit-scrollbar {
-      width: 15px;
-      height: 15px;
-    }
-
-    ::-webkit-scrollbar-track,
-    ::-webkit-scrollbar-corner {
-      background-color: #000;
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background-color: hsla(0, 0%, 100%, 0.2);
-    }
-
-    section {
-      position: absolute;
-      top: 5px;
-      right: 5px;
-      bottom: 5px;
-      left: 5px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background-color: #000;
-      user-select: none;
-      -webkit-app-region: drag;
-    }
-
-    pre {
-      max-height: 100%;
-      font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI',
-      'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
-      'Helvetica Neue', sans-serif;
-      font-size: 40px;
-      line-height: 1.4;
-      tab-size: 0;
-      white-space: pre-wrap;
-      color: #fff;
-    }
-
-    pre,
-    p {
-      margin: 0;
-    }
-
-    h1 {
-      margin: 0 0 1em;
-      font-size: 1.2em;
-      font-weight: normal;
-      line-height: 1.2;
-    }
-
-    small {
-      opacity: 0.7;
-    }
-
-    p {
-      text-align: center;
-    }
-  </style>
-</head>
-
-<body>
-  <section>
-    <pre id="pre"></pre>
-  </section>
-  <script>
-    const { ipcRenderer } = require('electron')
-    document.addEventListener('keydown', ev => { ipcRenderer.send('presentationKeydown', ev.code) })
-    const pre = document.getElementById('pre')
-    const setState = (_, payload) => { pre.innerHTML = payload }
-    ipcRenderer.on('openPresentation', setState)
-    ipcRenderer.on('setStanza', setState)
-  </script>
-</body>
-
+  <body>
+    <section><pre id="pre"></pre></section>
+    <script>
+      const { ipcRenderer } = require('electron')
+      document.addEventListener('keydown', ({ code, ctrlKey }) => {
+        ipcRenderer.send('presentationKeydown', { code, ctrlKey })
+      })
+      const pre = document.getElementById('pre')
+      const setFontSize = size => (pre.style.fontSize = `${size}px`)
+      const setZoom = (_, payload) => {
+        const computedFontSize = window
+          .getComputedStyle(pre, null)
+          .getPropertyValue('font-size')
+        const fontSize = parseFloat(computedFontSize)
+        switch (payload) {
+          case 'Digit0':
+            setFontSize(40)
+            break
+          case 'Minus':
+            setFontSize(fontSize - 1)
+            break
+          case 'Equal':
+            setFontSize(fontSize + 1)
+            break
+        }
+      }
+      const setState = (_, payload) => {
+        pre.innerHTML = payload
+      }
+      ipcRenderer.on('openPresentation', setState)
+      ipcRenderer.on('setStanza', setState)
+      ipcRenderer.on('zoom', setZoom)
+    </script>
+  </body>
 </html>

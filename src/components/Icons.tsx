@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-export const IconNew = () => (
+export const IconNew = (
   <svg
     width="24"
     height="24"
@@ -17,7 +17,7 @@ export const IconNew = () => (
   </svg>
 )
 
-export const IconPresent = () => (
+export const IconPresent = (
   <svg
     width="24"
     height="24"
@@ -33,7 +33,7 @@ export const IconPresent = () => (
   </svg>
 )
 
-export const IconClose = () => (
+export const IconClose = (
   <svg
     width="24"
     height="24"
@@ -50,7 +50,7 @@ export const IconClose = () => (
   </svg>
 )
 
-export const IconArrowLeft = () => (
+export const IconArrowLeft = (
   <svg
     width="24"
     height="24"
@@ -67,7 +67,7 @@ export const IconArrowLeft = () => (
   </svg>
 )
 
-export const IconBlank = () => (
+export const IconBlank = (
   <svg
     width="24"
     height="24"
@@ -83,7 +83,7 @@ export const IconBlank = () => (
   </svg>
 )
 
-export const IconArrowRight = () => (
+export const IconArrowRight = (
   <svg
     width="24"
     height="24"
@@ -100,7 +100,7 @@ export const IconArrowRight = () => (
   </svg>
 )
 
-export const IconSearch = () => (
+export const IconSearch = (
   <svg
     width="24"
     height="24"

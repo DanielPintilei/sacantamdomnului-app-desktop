@@ -234,43 +234,52 @@ class ControlPanel extends React.Component<
     this.setState({ searchResults })
   }
   focusSearchInput = () => {
-    const searchInput = this.searchInput
+    const { searchInput } = this
     if (searchInput) {
       searchInput.focus()
       searchInput.select()
     }
   }
-  componentDidMount() {
-    const handleKeydown = (code: string) => {
-      switch (code) {
-        case 'F5':
-          this.openPresentation()
-          break
-        case 'Enter':
-          this.startPresentation()
-          break
-        case 'F8':
-          this.closePresentations()
-          break
-        case 'ArrowLeft':
-          this.changeStanza(true)
-          break
-        case 'Escape':
-          this.resetPresentation()
-          break
-        case 'ArrowRight':
-          this.changeStanza()
-          break
-        case 'F3':
-          this.focusSearchInput()
-          break
-      }
+  setZoom(code: string) {
+    ipcRenderer.send('zoom', code)
+  }
+  handleKeydown = ({ code, ctrlKey }: KeyboardEvent) => {
+    switch (code) {
+      case 'F5':
+        this.openPresentation()
+        break
+      case 'Enter':
+        this.startPresentation()
+        break
+      case 'F8':
+        this.closePresentations()
+        break
+      case 'ArrowLeft':
+        this.changeStanza(true)
+        break
+      case 'Escape':
+        this.resetPresentation()
+        break
+      case 'ArrowRight':
+        this.changeStanza()
+        break
+      case 'F3':
+        this.focusSearchInput()
+        break
+      case 'Digit0':
+      case 'Minus':
+      case 'Equal':
+        if (ctrlKey) this.setZoom(code)
+        break
     }
+  }
+  componentDidMount() {
     document.addEventListener('keydown', ev => {
-      if (document.activeElement !== this.searchInput) handleKeydown(ev.code)
+      if (document.activeElement !== this.searchInput) this.handleKeydown(ev)
     })
-    ipcRenderer.on('receivePresentationKeydown', (_: any, payload: string) =>
-      handleKeydown(payload),
+    ipcRenderer.on(
+      'receivePresentationKeydown',
+      (_: any, payload: KeyboardEvent) => this.handleKeydown(payload),
     )
     ipcRenderer.on(
       'updateMessage',
@@ -313,7 +322,7 @@ class ControlPanel extends React.Component<
               effect="solid"
               delayShow={1500}
               className="tooltip"
-              html={true}
+              html
             />
             <Controls>
               <nav>
@@ -321,7 +330,7 @@ class ControlPanel extends React.Component<
                   onClick={this.openPresentation}
                   data-tip="Deschidere fereastră de prezentare<div>F5</div>"
                 >
-                  <IconNew />
+                  {IconNew}
                   Fereastră
                   <br />
                   nouă
@@ -330,7 +339,7 @@ class ControlPanel extends React.Component<
                   onClick={this.startPresentation}
                   data-tip="Afișare cântare curentă<div>Enter</div>"
                 >
-                  <IconPresent />
+                  {IconPresent}
                   Afișare
                   <br />
                   cântare
@@ -339,7 +348,7 @@ class ControlPanel extends React.Component<
                   onClick={this.closePresentations}
                   data-tip="Închidere ferestre de prezentare<div>F8</div>"
                 >
-                  <IconClose />
+                  {IconClose}
                   Închidere
                   <br />
                   ferestre
@@ -350,7 +359,7 @@ class ControlPanel extends React.Component<
                   onClick={() => this.changeStanza(true)}
                   data-tip="Afișare strofă precedentă<div>Săgeată Stânga</div>"
                 >
-                  <IconArrowLeft />
+                  {IconArrowLeft}
                   Strofa
                   <br />
                   precedentă
@@ -359,7 +368,7 @@ class ControlPanel extends React.Component<
                   onClick={this.resetPresentation}
                   data-tip="Anulare afișare cântare curentă<div>Esc</div>"
                 >
-                  <IconBlank />
+                  {IconBlank}
                   Anulare
                   <br />
                   afișare
@@ -368,7 +377,7 @@ class ControlPanel extends React.Component<
                   onClick={() => this.changeStanza()}
                   data-tip="Afișare strofă următoare<div>Săgeată Dreapta</div>"
                 >
-                  <IconArrowRight />
+                  {IconArrowRight}
                   Strofa
                   <br />
                   următoare
@@ -377,7 +386,7 @@ class ControlPanel extends React.Component<
             </Controls>
             <Form onSubmit={this.onSearchSubmit}>
               <label data-tip="Căutare<div>F3</div>">
-                <IconSearch />
+                {IconSearch}
                 <input
                   type="search"
                   value={this.state.searchInputValue}

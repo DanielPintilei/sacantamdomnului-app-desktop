@@ -2,23 +2,23 @@
 const electron = require('electron')
 const { autoUpdater } = require('electron-updater')
 
-const { app, BrowserWindow, Menu, ipcMain } = electron
+const { app, BrowserWindow, Menu, ipcMain, shell } = electron
 
 // Adds debug features like hotkeys for triggering dev tools and reload
-// require('electron-debug')()
+// require('electron-debug')({ devToolsMode: 'bottom' })
 
 // Prevent window being garbage collected
 let mainWindow
 let presentWindows = []
 let presentWindowsCount = 0
 
-function onClosed() {
+function onClosed () {
   // Dereference the window
   // For multiple windows store them in an array
   mainWindow = null
 }
 
-function createMainWindow() {
+function createMainWindow () {
   const window = new BrowserWindow({
     show: false,
     width: 1000,
@@ -36,13 +36,13 @@ function createMainWindow() {
   return window
 }
 
-function createShortcutsWindow() {
+function createShortcutsWindow () {
   const window = new BrowserWindow({
     parent: mainWindow,
     modal: true,
     show: false,
     width: 550,
-    height: 620,
+    height: 550,
     minimizable: false,
     maximizable: false,
   })
@@ -54,18 +54,23 @@ function createShortcutsWindow() {
   return window
 }
 
-function setStatePresentWindows(state) {
+function setStatePresentWindows (state) {
   presentWindows.forEach(({ ref }) => {
     ref.webContents.send('setStanza', state)
   })
 }
-function closePresentWindows(state) {
+function closePresentWindows () {
   presentWindows.forEach(({ ref }) => {
     ref.close()
   })
 }
+function zoomPresentWindows (type) {
+  presentWindows.forEach(({ ref }) => {
+    ref.webContents.send('zoom', type)
+  })
+}
 
-function createPresentWindow(initialState, id) {
+function createPresentWindow (initialState, id) {
   const window = new BrowserWindow({
     show: false,
     width: 1000,
@@ -98,6 +103,7 @@ ipcMain.on('closePresentations', closePresentWindows)
 ipcMain.on('presentationKeydown', (_, payload) =>
   mainWindow.webContents.send('receivePresentationKeydown', payload),
 )
+ipcMain.on('zoom', (_, payload) => zoomPresentWindows(payload))
 ipcMain.on('showShortcutsWindow', () => createShortcutsWindow())
 
 app.on('window-all-closed', () => {
@@ -116,9 +122,9 @@ const mainMenuTemplate = [
   {
     label: 'View',
     submenu: [
-      { role: 'resetzoom' },
-      { role: 'zoomin', accelerator: 'CmdOrCtrl+=' },
-      { role: 'zoomout', accelerator: 'CmdOrCtrl+-' },
+      { role: 'resetzoom', accelerator: 'CmdOrCtrl+Alt+0' },
+      { role: 'zoomin', accelerator: 'CmdOrCtrl+Alt+=' },
+      { role: 'zoomout', accelerator: 'CmdOrCtrl+Alt+-' },
       { type: 'separator' },
       { role: 'togglefullscreen' },
     ],
@@ -132,16 +138,14 @@ const mainMenuTemplate = [
     submenu: [
       {
         label: 'Shortcuts',
-        click() {
+        click () {
           createShortcutsWindow()
         },
       },
       {
-        label: 'Learn More',
-        click() {
-          require('electron').shell.openExternal(
-            'https://www.sacantamdomnului-app.cf',
-          )
+        label: 'About',
+        click () {
+          shell.openExternal('https://www.sacantamdomnului-app.cf')
         },
       },
     ],
