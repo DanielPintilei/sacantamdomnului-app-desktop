@@ -226,7 +226,7 @@ class ControlPanel extends React.Component<
       })
       .sort((a, b) => a.number - b.number)
       .map(({ number, title, path }) => (
-        <Link key={path} to={path}>
+        <Link key={path} to={path} tabIndex={1}>
           <span>{number}.</span>
           {title}
         </Link>
@@ -246,10 +246,8 @@ class ControlPanel extends React.Component<
   handleKeydown = ({ code, ctrlKey }: KeyboardEvent) => {
     switch (code) {
       case 'F5':
-        this.openPresentation()
-        break
-      case 'Enter':
-        this.startPresentation()
+        if (ctrlKey) this.openPresentation()
+        else this.startPresentation()
         break
       case 'F8':
         this.closePresentations()
@@ -328,7 +326,9 @@ class ControlPanel extends React.Component<
               <nav>
                 <button
                   onClick={this.openPresentation}
-                  data-tip="Deschidere fereastră de prezentare<div>F5</div>"
+                  data-tip="Deschidere fereastră de prezentare<div>Ctrl + F5</div>"
+                  className="button"
+                  tabIndex={1}
                 >
                   {IconNew}
                   Fereastră
@@ -337,7 +337,9 @@ class ControlPanel extends React.Component<
                 </button>
                 <button
                   onClick={this.startPresentation}
-                  data-tip="Afișare cântare curentă<div>Enter</div>"
+                  data-tip="Afișare cântare curentă<div>F5</div>"
+                  className="button"
+                  tabIndex={1}
                 >
                   {IconPresent}
                   Afișare
@@ -347,6 +349,8 @@ class ControlPanel extends React.Component<
                 <button
                   onClick={this.closePresentations}
                   data-tip="Închidere ferestre de prezentare<div>F8</div>"
+                  className="button"
+                  tabIndex={1}
                 >
                   {IconClose}
                   Închidere
@@ -358,6 +362,8 @@ class ControlPanel extends React.Component<
                 <button
                   onClick={() => this.changeStanza(true)}
                   data-tip="Afișare strofă precedentă<div>Săgeată Stânga</div>"
+                  className="button"
+                  tabIndex={1}
                 >
                   {IconArrowLeft}
                   Strofa
@@ -367,6 +373,8 @@ class ControlPanel extends React.Component<
                 <button
                   onClick={this.resetPresentation}
                   data-tip="Anulare afișare cântare curentă<div>Esc</div>"
+                  className="button"
+                  tabIndex={1}
                 >
                   {IconBlank}
                   Anulare
@@ -376,6 +384,8 @@ class ControlPanel extends React.Component<
                 <button
                   onClick={() => this.changeStanza()}
                   data-tip="Afișare strofă următoare<div>Săgeată Dreapta</div>"
+                  className="button"
+                  tabIndex={1}
                 >
                   {IconArrowRight}
                   Strofa
@@ -394,6 +404,7 @@ class ControlPanel extends React.Component<
                   ref={element => {
                     this.searchInput = element
                   }}
+                  tabIndex={1}
                 />
               </label>
             </Form>

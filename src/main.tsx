@@ -20,6 +20,7 @@ const GlobalStyle = createGlobalStyle`
   }
   * {
     box-sizing: border-box;
+    outline-color: #e0b152;
   }
   body {
     border-left: 10px solid #f1f1f1;
@@ -39,7 +40,6 @@ const GlobalStyle = createGlobalStyle`
     cursor: pointer;
     background-color: transparent;
     border: none;
-    outline: none;
   }
   .button {
     &:active {

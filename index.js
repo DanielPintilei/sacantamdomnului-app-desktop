@@ -23,6 +23,9 @@ function createMainWindow () {
     show: false,
     width: 1000,
     height: 800,
+    webPreferences: {
+      nodeIntegration: true,
+    },
   })
   window.maximize()
   window.loadURL(`file://${__dirname}/html/main.html`)
@@ -45,6 +48,10 @@ function createShortcutsWindow () {
     height: 550,
     minimizable: false,
     maximizable: false,
+    // remove in electron 5
+    webPreferences: {
+      nodeIntegration: false,
+    },
   })
   window.loadURL(`file://${__dirname}/html/shortcuts.html`)
   window.setMenu(null)
@@ -76,6 +83,9 @@ function createPresentWindow (initialState, id) {
     width: 1000,
     height: 800,
     frame: false,
+    webPreferences: {
+      nodeIntegration: true,
+    },
   })
   window.loadURL(`file://${__dirname}/html/present.html`)
   window.setBackgroundColor('#000')
