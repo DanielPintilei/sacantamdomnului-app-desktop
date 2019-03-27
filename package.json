@@ -42,7 +42,7 @@
     "re-resizable": "^4.10.0",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
-    "react-router-dom": "^4.3.1",
+    "react-router-dom": "^5.0.0",
     "react-tooltip": "^3.9.0",
     "styled-components": "^4.1.2"
   },
@@ -52,21 +52,25 @@
     "@types/react-dom": "^16.0.11",
     "@types/react-router-dom": "^4.3.1",
     "@types/styled-components": "^4.1.2",
+    "@typescript-eslint/eslint-plugin": "^1.1.1",
     "devtron": "^1.4.0",
     "electron": "^4.0.0",
-    "electron-builder": "^20.38.2",
+    "electron-builder": "^20.38.4",
     "electron-debug": "^2.0.0",
     "eslint": "^5.10.0",
-    "eslint-plugin-typescript": "^0.14.0",
     "parcel-bundler": "^1.10.3",
-    "typescript": "^3.2.2",
-    "typescript-eslint-parser": "^21.0.2"
+    "typescript": "^3.2.2"
   },
   "eslintConfig": {
-    "parser": "typescript-eslint-parser",
+    "parser": "@typescript-eslint/parser",
     "plugins": [
-      "typescript"
+      "@typescript-eslint"
     ],
+    "parserOptions": {
+      "ecmaVersion": 2016,
+      "project": "./tsconfig.json",
+      "sourceType": "module"
+    },
     "rules": {
       "comma-dangle": [
         "error",
