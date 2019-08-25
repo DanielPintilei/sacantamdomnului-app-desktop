@@ -7,7 +7,7 @@ import {
   RouteComponentProps,
 } from 'react-router-dom'
 import styled from 'styled-components'
-import Resizable from 're-resizable'
+import { Resizable } from 're-resizable'
 import ReactTooltip from 'react-tooltip'
 import { replaceAccents } from '../formatContent'
 import { Piece } from '../formatContent'
@@ -240,7 +240,7 @@ class ControlPanel extends React.Component<
       searchInput.select()
     }
   }
-  setZoom(code: string) {
+  setZoom (code: string) {
     ipcRenderer.send('zoom', code)
   }
   handleKeydown = ({ code, ctrlKey }: KeyboardEvent) => {
@@ -271,7 +271,7 @@ class ControlPanel extends React.Component<
         break
     }
   }
-  componentDidMount() {
+  componentDidMount () {
     document.addEventListener('keydown', ev => {
       if (document.activeElement !== this.searchInput) this.handleKeydown(ev)
     })
@@ -295,7 +295,7 @@ class ControlPanel extends React.Component<
       localStorage.setItem(LOCAL_STORAGE_ALERT, 'true')
     }
   }
-  render() {
+  render () {
     const { width, searchResults, updateMessage } = this.state
     return (
       <div>

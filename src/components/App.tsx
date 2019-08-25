@@ -65,7 +65,7 @@ class App extends React.Component<{}, AppState> {
       },
     )
   }
-  componentDidMount() {
+  componentDidMount () {
     this.getStoredContent()
     fetchVersions()
       .then((fetchedVersions: any) => {
@@ -105,7 +105,7 @@ class App extends React.Component<{}, AppState> {
         this.getStoredContent()
       })
   }
-  render() {
+  render () {
     const { content, contentArray } = this.state
     return (
       <Router>

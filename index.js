@@ -48,10 +48,6 @@ function createShortcutsWindow () {
     height: 550,
     minimizable: false,
     maximizable: false,
-    // remove in electron 5
-    webPreferences: {
-      nodeIntegration: false,
-    },
   })
   window.loadURL(`file://${__dirname}/html/shortcuts.html`)
   window.setMenu(null)

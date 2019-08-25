@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { NavLink } from 'react-router-dom'
 import styled from 'styled-components'
-import Resizable from 're-resizable'
+import { Resizable } from 're-resizable'
 import { ContentFormatted, Piece, Folder as FolderType } from '../formatContent'
 
 const FolderWrapper = styled.div`
@@ -70,7 +70,7 @@ class Folder extends React.Component<FolderProps, FolderState> {
   state = {
     opened: this.props.defaultOpen,
   }
-  render() {
+  render () {
     const { title, isSubfolder, children } = this.props
     const { opened } = this.state
     return (
@@ -138,7 +138,7 @@ class Index extends React.Component<IndexProps> {
   state = {
     width: 340,
   }
-  render() {
+  render () {
     const {
       content: { songs, poems },
     } = this.props
