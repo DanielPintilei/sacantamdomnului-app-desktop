@@ -30,7 +30,7 @@ class App extends React.Component<{}, AppState> {
     content: undefined,
     contentArray: undefined,
   }
-  setContent = (storageRawContent: Object, child?: string) => {
+  setContent = (storageRawContent: Object, child?: string, storageVersions?: Object, fetchedVersions?: Object) => {
     fetchContent(child ? `/${child}` : '').then((rawContent: any) => {
       const mergedRawContent: ContentRaw = child
         ? { ...storageRawContent, [child]: rawContent }
@@ -49,6 +49,14 @@ class App extends React.Component<{}, AppState> {
       storage.set('contentArray', contentArray, (error: any) => {
         if (error) throw error
       })
+      storage.set(
+        'storageVersions',
+        {
+          ...storageVersions,
+          ...fetchedVersions && child && { [child]: fetchedVersions[child] },
+        },
+        (error: any) => { if (error) throw error },
+      )
       this.setState({ content, contentArray })
     })
   }
@@ -88,7 +96,7 @@ class App extends React.Component<{}, AppState> {
                   !!storageVersions[key] &&
                   fetchedVersions[key] > storageVersions[key]
                 ) {
-                  this.setContent(storageRawContent, key)
+                  this.setContent(storageRawContent, key, storageVersions, fetchedVersions)
                 }
               }
             } else {
@@ -96,9 +104,6 @@ class App extends React.Component<{}, AppState> {
             }
           },
         )
-        storage.set('storageVersions', fetchedVersions, (error: any) => {
-          if (error) throw error
-        })
       })
       .catch((error: any) => {
         console.log(error)
