@@ -24,6 +24,9 @@ const GlobalStyle = createGlobalStyle`
   }
   body {
     border-left: 10px solid #f1f1f1;
+    @media (prefers-color-scheme: dark) {
+      border-color: #000;
+    }
   }
   body,
   pre {
@@ -53,9 +56,15 @@ const GlobalStyle = createGlobalStyle`
   ::-webkit-scrollbar-track,
   ::-webkit-scrollbar-corner {
     background-color: #f1f1f1;
+    @media (prefers-color-scheme: dark) {
+      background-color: #000;
+    }
   }
   ::-webkit-scrollbar-thumb {
     background-color: hsla(0, 0%, 0%, 0.1);
+    @media (prefers-color-scheme: dark) {
+      background-color: hsla(0, 0%, 100%, 0.3);
+    }
   }
   ::selection {
     color: #fff;

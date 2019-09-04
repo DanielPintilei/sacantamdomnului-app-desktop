@@ -25,6 +25,7 @@ function createMainWindow () {
     height: 800,
     webPreferences: {
       nodeIntegration: true,
+      devTools: 'false',
     },
   })
   window.maximize()
@@ -48,6 +49,9 @@ function createShortcutsWindow () {
     height: 550,
     minimizable: false,
     maximizable: false,
+    webPreferences: {
+      devTools: 'false',
+    },
   })
   window.loadURL(`file://${__dirname}/html/shortcuts.html`)
   window.setMenu(null)
@@ -81,6 +85,7 @@ function createPresentWindow (initialState, id) {
     frame: false,
     webPreferences: {
       nodeIntegration: true,
+      devTools: 'false',
     },
   })
   window.loadURL(`file://${__dirname}/html/present.html`)
