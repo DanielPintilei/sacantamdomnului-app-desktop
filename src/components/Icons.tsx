@@ -102,6 +102,7 @@ export const IconArrowRight = (
 
 export const IconSearch = (
   <svg
+    data-tip="Căutare<div>F3</div>"
     width="24"
     height="24"
     viewBox="0 0 24 24"

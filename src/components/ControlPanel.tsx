@@ -395,7 +395,7 @@ class ControlPanel extends React.Component<
               </nav>
             </Controls>
             <Form onSubmit={this.onSearchSubmit}>
-              <label data-tip="Căutare<div>F3</div>">
+              <label>
                 {IconSearch}
                 <input
                   type="search"

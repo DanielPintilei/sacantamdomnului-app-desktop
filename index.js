@@ -5,7 +5,7 @@ const { autoUpdater } = require('electron-updater')
 const { app, BrowserWindow, Menu, ipcMain, shell } = electron
 
 // Adds debug features like hotkeys for triggering dev tools and reload
-require('electron-debug')({ devToolsMode: 'bottom' })
+// require('electron-debug')({ devToolsMode: 'bottom' })
 
 // Prevent window being garbage collected
 let mainWindow
