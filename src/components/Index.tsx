@@ -70,7 +70,7 @@ class Folder extends React.Component<FolderProps, FolderState> {
   state = {
     opened: this.props.defaultOpen,
   }
-  render () {
+  render() {
     const { title, isSubfolder, children } = this.props
     const { opened } = this.state
     return (
@@ -129,6 +129,7 @@ const Folders = ({ folders }: { folders: FolderType[] } & any) =>
 const Wrapper = styled.div`
   height: 100vh;
   padding: 10px 0 10px 4px;
+  border-top: 10px solid #f1f1f1;
   overflow: scroll;
 `
 type IndexProps = {
@@ -138,7 +139,7 @@ class Index extends React.Component<IndexProps> {
   state = {
     width: 340,
   }
-  render () {
+  render() {
     const {
       content: { songs, poems },
     } = this.props

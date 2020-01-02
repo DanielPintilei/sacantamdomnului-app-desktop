@@ -2,7 +2,9 @@
 const electron = require('electron')
 const { autoUpdater } = require('electron-updater')
 
-const { app, BrowserWindow, Menu, ipcMain, shell } = electron
+const { app, BrowserWindow, Menu, ipcMain, shell, nativeTheme } = electron
+
+nativeTheme.themeSource = 'light'
 
 // Adds debug features like hotkeys for triggering dev tools and reload
 // require('electron-debug')({ devToolsMode: 'bottom' })
@@ -12,13 +14,13 @@ let mainWindow
 let presentWindows = []
 let presentWindowsCount = 0
 
-function onClosed () {
+function onClosed() {
   // Dereference the window
   // For multiple windows store them in an array
   mainWindow = null
 }
 
-function createMainWindow () {
+function createMainWindow() {
   const window = new BrowserWindow({
     show: false,
     width: 1000,
@@ -40,7 +42,7 @@ function createMainWindow () {
   return window
 }
 
-function createShortcutsWindow () {
+function createShortcutsWindow() {
   const window = new BrowserWindow({
     parent: mainWindow,
     modal: true,
@@ -61,23 +63,23 @@ function createShortcutsWindow () {
   return window
 }
 
-function setStatePresentWindows (state) {
+function setStatePresentWindows(state) {
   presentWindows.forEach(({ ref }) => {
     ref.webContents.send('setStanza', state)
   })
 }
-function closePresentWindows () {
+function closePresentWindows() {
   presentWindows.forEach(({ ref }) => {
     ref.close()
   })
 }
-function zoomPresentWindows (type) {
+function zoomPresentWindows(type) {
   presentWindows.forEach(({ ref }) => {
     ref.webContents.send('zoom', type)
   })
 }
 
-function createPresentWindow (initialState, id) {
+function createPresentWindow(initialState, id) {
   const window = new BrowserWindow({
     show: false,
     width: 1000,
@@ -149,13 +151,13 @@ const mainMenuTemplate = [
     submenu: [
       {
         label: 'Shortcuts',
-        click () {
+        click() {
           createShortcutsWindow()
         },
       },
       {
         label: 'About',
-        click () {
+        click() {
           shell.openExternal('https://www.sacantamdomnului-app.cf')
         },
       },

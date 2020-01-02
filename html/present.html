@@ -111,6 +111,7 @@
       }
       const setState = (_, payload) => {
         pre.innerHTML = payload
+        window.scrollTo(0, 0)
       }
       ipcRenderer.on('openPresentation', setState)
       ipcRenderer.on('setStanza', setState)

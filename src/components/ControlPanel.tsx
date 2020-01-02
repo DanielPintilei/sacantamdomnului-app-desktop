@@ -26,6 +26,7 @@ const Wrapper = styled.div`
   overflow-x: scroll;
   display: flex;
   flex-direction: column;
+  border-top: 10px solid #f1f1f1;
   & > * {
     min-width: 250px;
   }
@@ -240,7 +241,7 @@ class ControlPanel extends React.Component<
       searchInput.select()
     }
   }
-  setZoom (code: string) {
+  setZoom(code: string) {
     ipcRenderer.send('zoom', code)
   }
   handleKeydown = ({ code, ctrlKey }: KeyboardEvent) => {
@@ -271,7 +272,7 @@ class ControlPanel extends React.Component<
         break
     }
   }
-  componentDidMount () {
+  componentDidMount() {
     document.addEventListener('keydown', ev => {
       if (document.activeElement !== this.searchInput) this.handleKeydown(ev)
     })
@@ -295,7 +296,7 @@ class ControlPanel extends React.Component<
       localStorage.setItem(LOCAL_STORAGE_ALERT, 'true')
     }
   }
-  render () {
+  render() {
     const { width, searchResults, updateMessage } = this.state
     return (
       <div>

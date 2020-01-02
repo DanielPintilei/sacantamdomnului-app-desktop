@@ -17,5 +17,5 @@
     "suppressImplicitAnyIndexErrors": true,
     "noUnusedLocals": true
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*", "index.js"]
 }

@@ -30,7 +30,12 @@ class App extends React.Component<{}, AppState> {
     content: undefined,
     contentArray: undefined,
   }
-  setContent = (storageRawContent: Object, child?: string, storageVersions?: Object, fetchedVersions?: Object) => {
+  setContent = (
+    storageRawContent: Object,
+    child?: string,
+    storageVersions?: Object,
+    fetchedVersions?: Object,
+  ) => {
     fetchContent(child ? `/${child}` : '').then((rawContent: any) => {
       const mergedRawContent: ContentRaw = child
         ? { ...storageRawContent, [child]: rawContent }
@@ -53,9 +58,11 @@ class App extends React.Component<{}, AppState> {
         'storageVersions',
         {
           ...storageVersions,
-          ...fetchedVersions && child && { [child]: fetchedVersions[child] },
+          ...(fetchedVersions && child && { [child]: fetchedVersions[child] }),
         },
-        (error: any) => { if (error) throw error },
+        (error: any) => {
+          if (error) throw error
+        },
       )
       this.setState({ content, contentArray })
     })
@@ -73,7 +80,7 @@ class App extends React.Component<{}, AppState> {
       },
     )
   }
-  componentDidMount () {
+  componentDidMount() {
     this.getStoredContent()
     fetchVersions()
       .then((fetchedVersions: any) => {
@@ -96,7 +103,12 @@ class App extends React.Component<{}, AppState> {
                   !!storageVersions[key] &&
                   fetchedVersions[key] > storageVersions[key]
                 ) {
-                  this.setContent(storageRawContent, key, storageVersions, fetchedVersions)
+                  this.setContent(
+                    storageRawContent,
+                    key,
+                    storageVersions,
+                    fetchedVersions,
+                  )
                 }
               }
             } else {
@@ -110,7 +122,7 @@ class App extends React.Component<{}, AppState> {
         this.getStoredContent()
       })
   }
-  render () {
+  render() {
     const { content, contentArray } = this.state
     return (
       <Router>

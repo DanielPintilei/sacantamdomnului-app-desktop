@@ -108,6 +108,7 @@ const StyledMain = styled.div`
   display: flex;
   justify-content: center;
   height: 100vh;
+  border-top: 10px solid #f1f1f1;
   overflow: scroll;
 `
 type MainProps = {
