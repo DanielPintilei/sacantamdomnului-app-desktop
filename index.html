@@ -153,7 +153,7 @@
             var downloadUrl = asset.browser_download_url
             if (downloadUrl.match(/.exe$/)) buttonWindows.href = downloadUrl
             if (downloadUrl.match(/.AppImage$/)) buttonLinux.href = downloadUrl
-            if (downloadUrl.match(/.dmg$/)) buttonMacos.href = downloadUrl
+            if (downloadUrl.match(/.pkg$/)) buttonMacos.href = downloadUrl
           })
         })
         .catch(function(err) {})
