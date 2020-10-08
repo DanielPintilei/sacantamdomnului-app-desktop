@@ -28,7 +28,7 @@ function createMainWindow() {
     webPreferences: {
       nodeIntegration: true,
       enableRemoteModule: true,
-      devTools: 'false',
+      devTools: false,
     },
   })
   window.maximize()
@@ -88,7 +88,7 @@ function createPresentWindow(initialState, id) {
     frame: false,
     webPreferences: {
       nodeIntegration: true,
-      devTools: 'false',
+      devTools: false,
     },
   })
   window.loadURL(`file://${__dirname}/html/present.html`)
