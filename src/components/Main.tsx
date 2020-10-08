@@ -82,13 +82,13 @@ type PieceProps = {
   match: { params: { path: string } }
   contentArray: Piece[]
 }
-const Piece: React.StatelessComponent<PieceProps> = ({
+const Piece: React.FunctionComponent<PieceProps> = ({
   match: {
     params: { path },
   },
   contentArray,
 }) => {
-  const currentPiece = contentArray.find(piece => piece.path === path)!
+  const currentPiece = contentArray.find((piece) => piece.path === path)!
   if (currentPiece) {
     return (
       <StyledPiece>
@@ -114,13 +114,13 @@ const StyledMain = styled.div`
 type MainProps = {
   contentArray: Piece[]
 }
-const Main: React.StatelessComponent<MainProps> = ({ contentArray }) => (
+const Main: React.FunctionComponent<MainProps> = ({ contentArray }) => (
   <StyledMain>
     <Route exact path="/" component={BackgroundImage} />
     {contentArray.length ? (
       <Route
         path="/:path"
-        render={props => <Piece contentArray={contentArray} {...props} />}
+        render={(props) => <Piece contentArray={contentArray} {...props} />}
       />
     ) : null}
   </StyledMain>

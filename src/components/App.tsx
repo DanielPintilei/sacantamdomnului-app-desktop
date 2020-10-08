@@ -1,11 +1,12 @@
 import * as storage from 'electron-json-storage'
 import * as React from 'react'
+import { ipcRenderer } from 'electron'
 import { HashRouter as Router } from 'react-router-dom'
 import styled from 'styled-components'
 import Index from './Index'
 import Main from './Main'
 import ControlPanel from './ControlPanel'
-import fetchContent, { fetchVersions } from '../fetchContent'
+import fetchContent from '../fetchContent'
 import formatContent, {
   arrayFoldersContent,
   ContentFormatted,
@@ -15,10 +16,17 @@ import formatContent, {
 
 storage.setDataPath()
 
+const contentBooks = ['scd', 'alteCantari', 'colinde', 'poezii']
+
 const Wrapper = styled.div`
   display: flex;
   background-color: #fff;
 `
+
+type ContentRawSingle = {
+  version: number
+  content: []
+}
 
 type AppState = {
   content?: ContentFormatted
@@ -30,97 +38,76 @@ class App extends React.Component<{}, AppState> {
     content: undefined,
     contentArray: undefined,
   }
-  setContent = (
-    storageRawContent: Object,
-    child?: string,
-    storageVersions?: Object,
-    fetchedVersions?: Object,
-  ) => {
-    fetchContent(child ? `/${child}` : '').then((rawContent: any) => {
-      const mergedRawContent: ContentRaw = child
-        ? { ...storageRawContent, [child]: rawContent }
-        : { ...storageRawContent, ...rawContent }
-      const content = formatContent(mergedRawContent)
-      const contentArray = arrayFoldersContent([
-        ...content.songs.folders,
-        ...content.poems.folders,
-      ])
-      storage.set('storageRawContent', mergedRawContent, (error: any) => {
-        if (error) throw error
-      })
-      storage.set('content', content, (error: any) => {
-        if (error) throw error
-      })
-      storage.set('contentArray', contentArray, (error: any) => {
-        if (error) throw error
-      })
-      storage.set(
-        'storageVersions',
-        {
-          ...storageVersions,
-          ...(fetchedVersions && child && { [child]: fetchedVersions[child] }),
-        },
-        (error: any) => {
-          if (error) throw error
-        },
-      )
-      this.setState({ content, contentArray })
+  setContent = async (storageRawContent?: ContentRaw) => {
+    const mergedContentRaw = { ...storageRawContent } as any
+    const fetchAllContent = async () => {
+      for (const book of contentBooks) {
+        const child = `${book}/${
+          storageRawContent && Object.entries(storageRawContent).length
+            ? storageRawContent[book].version
+            : 0
+        }`
+        await fetchContent(child)
+          .then((contentRawSingle: ContentRawSingle) => {
+            mergedContentRaw[book] = contentRawSingle
+          })
+          .catch((error) => error)
+      }
+    }
+    await fetchAllContent()
+    const content = formatContent(mergedContentRaw)
+    const contentArray = arrayFoldersContent([
+      ...content.songs.folders,
+      ...content.poems.folders,
+    ])
+    storage.set('storageRawContent', mergedContentRaw, (error: any) => {
+      if (error) throw error
     })
+    storage.set('content', content, (error: any) => {
+      if (error) throw error
+    })
+    storage.set('contentArray', contentArray, (error: any) => {
+      if (error) throw error
+    })
+    this.setState({ content, contentArray })
   }
   getStoredContent = () => {
     storage.getMany(
-      ['content', 'contentArray'],
-      (error: any, { content, contentArray }: AppState) => {
+      ['storageRawContent', 'content', 'contentArray'],
+      (
+        error,
+        {
+          storageRawContent,
+          content,
+          contentArray,
+        }: { storageRawContent?: ContentRaw } & AppState,
+      ) => {
         if (error) console.log(error)
-        this.setState({
-          content: content && Object.keys(content).length ? content : undefined,
-          contentArray:
-            contentArray && contentArray.length ? contentArray : undefined,
-        })
+        const isContent = Boolean(
+          content &&
+            Object.keys(content).length &&
+            contentArray &&
+            contentArray.length,
+        )
+        if (isContent) this.setState({ content, contentArray })
+        this.setContent(storageRawContent)
       },
     )
   }
   componentDidMount() {
     this.getStoredContent()
-    fetchVersions()
-      .then((fetchedVersions: any) => {
-        storage.getMany(
-          ['storageVersions', 'storageRawContent'],
-          (
-            error: any,
-            {
-              storageVersions,
-              storageRawContent,
-            }: { storageVersions: Object; storageRawContent: Object },
-          ) => {
-            if (error) throw error
-            if (
-              storageRawContent &&
-              Object.keys(storageRawContent).length >= 4
-            ) {
-              for (const key of Object.keys(fetchedVersions)) {
-                if (
-                  !!storageVersions[key] &&
-                  fetchedVersions[key] > storageVersions[key]
-                ) {
-                  this.setContent(
-                    storageRawContent,
-                    key,
-                    storageVersions,
-                    fetchedVersions,
-                  )
-                }
-              }
-            } else {
-              this.setContent(storageRawContent)
-            }
+    ipcRenderer.on('receiveUpdateRequest', (_: any, force: boolean) => {
+      if (force) this.setContent()
+      else {
+        storage.get(
+          'storageRawContent',
+          (error, storageRawContent: ContentRaw) => {
+            if (error) console.log(error)
+            this.setContent(storageRawContent)
           },
         )
-      })
-      .catch((error: any) => {
-        console.log(error)
-        this.getStoredContent()
-      })
+      }
+    })
   }
   render() {
     const { content, contentArray } = this.state

@@ -5,18 +5,18 @@ import App from './components/App'
 
 const GlobalStyle = createGlobalStyle`
   @font-face {
-    font-family: 'Open Sans';
+    font-family: 'Noto Sans';
     font-weight: 400;
     font-style: normal;
-    src: local('Open Sans Regular'), local('OpenSans-Regular'),
-      url('../fonts/Open_Sans/OpenSans-Regular.ttf') format('truetype');
+    src: local('Noto Sans Regular'), local('NotoSans-Regular'),
+      url('../fonts/Noto_Sans/NotoSans-Regular.ttf') format('truetype');
   }
   @font-face {
-    font-family: 'Open Sans';
+    font-family: 'Noto Sans';
     font-weight: 400;
     font-style: italic;
-    src: local('Open Sans Italic'), local('OpenSans-Italic'),
-      url('../fonts/Open_Sans/OpenSans-Italic.ttf') format('truetype');
+    src: local('Noto Sans Italic'), local('NotoSans-Italic'),
+      url('../fonts/Noto_Sans/NotoSans-Italic.ttf') format('truetype');
   }
   * {
     box-sizing: border-box;
@@ -27,7 +27,7 @@ const GlobalStyle = createGlobalStyle`
   }
   body,
   pre {
-    font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    font-family: 'Noto Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI',
     'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
     'Helvetica Neue', sans-serif;
   }

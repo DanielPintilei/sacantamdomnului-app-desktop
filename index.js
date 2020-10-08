@@ -7,7 +7,7 @@ const { app, BrowserWindow, Menu, ipcMain, shell, nativeTheme } = electron
 nativeTheme.themeSource = 'light'
 
 // Adds debug features like hotkeys for triggering dev tools and reload
-// require('electron-debug')({ devToolsMode: 'bottom' })
+// require('electron-debug')({ devToolsMode: 'bottom', showDevTools: true })
 
 // Prevent window being garbage collected
 let mainWindow
@@ -27,6 +27,7 @@ function createMainWindow() {
     height: 800,
     webPreferences: {
       nodeIntegration: true,
+      enableRemoteModule: true,
       devTools: 'false',
     },
   })
@@ -52,7 +53,7 @@ function createShortcutsWindow() {
     minimizable: false,
     maximizable: false,
     webPreferences: {
-      devTools: 'false',
+      devTools: false,
     },
   })
   window.loadURL(`file://${__dirname}/html/shortcuts.html`)
@@ -97,7 +98,7 @@ function createPresentWindow(initialState, id) {
     window.show()
   })
   window.on('closed', () => {
-    presentWindows = presentWindows.filter(window => window.id !== id)
+    presentWindows = presentWindows.filter((window) => window.id !== id)
   })
   return window
 }
@@ -131,6 +132,10 @@ app.on('activate', () => {
   }
 })
 
+function updateContent(force) {
+  mainWindow.webContents.send('receiveUpdateRequest', force)
+}
+
 const mainMenuTemplate = [
   {
     label: 'View',
@@ -145,6 +150,23 @@ const mainMenuTemplate = [
   {
     role: 'window',
     submenu: [{ role: 'minimize' }, { role: 'close' }],
+  },
+  {
+    label: 'Update',
+    submenu: [
+      {
+        label: 'Update content',
+        click() {
+          updateContent()
+        },
+      },
+      {
+        label: 'Force update content',
+        click() {
+          updateContent(true)
+        },
+      },
+    ],
   },
   {
     role: 'help',
@@ -190,7 +212,7 @@ autoUpdater.on('update-not-available', () => {
     true,
   )
 })
-autoUpdater.on('error', err => {
+autoUpdater.on('error', (err) => {
   sendUpdateStatusToWindow(`Error in auto-updater: ${err}`, true)
 })
 autoUpdater.on('download-progress', ({ percent }) => {

@@ -63,51 +63,45 @@ type FolderProps = {
   isSubfolder?: boolean
   defaultOpen?: boolean
 }
-type FolderState = {
-  opened: boolean | undefined
-}
-class Folder extends React.Component<FolderProps, FolderState> {
-  state = {
-    opened: this.props.defaultOpen,
-  }
-  render() {
-    const { title, isSubfolder, children } = this.props
-    const { opened } = this.state
-    return (
-      <FolderWrapper>
-        <ButtonFolder
-          type="button"
-          onClick={() =>
-            this.setState(prevState => ({ opened: !prevState.opened }))
-          }
-          style={{ paddingLeft: isSubfolder ? 0 : 10 }}
-          className={opened ? 'opened' : ''}
+const Folder: React.FC<FolderProps> = ({
+  defaultOpen,
+  title,
+  isSubfolder,
+  children,
+}) => {
+  const [opened, setOpened] = React.useState(defaultOpen)
+  return (
+    <FolderWrapper>
+      <ButtonFolder
+        type="button"
+        onClick={() => setOpened((prevState) => !prevState)}
+        style={{ paddingLeft: isSubfolder ? 0 : 10 }}
+        className={opened ? 'opened' : ''}
+      >
+        {isSubfolder && <span className="dots" />}
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         >
-          {isSubfolder && <span className="dots" />}
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
-            {!opened && <line x1="12" y1="11" x2="12" y2="17" />}
-            <line x1="9" y1="14" x2="15" y2="14" />
-          </svg>
-          {title}
-        </ButtonFolder>
-        {opened && <FileWrapper>{children}</FileWrapper>}
-      </FolderWrapper>
-    )
-  }
+          <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
+          {!opened && <line x1="12" y1="11" x2="12" y2="17" />}
+          <line x1="9" y1="14" x2="15" y2="14" />
+        </svg>
+        {title}
+      </ButtonFolder>
+      {opened && <FileWrapper>{children}</FileWrapper>}
+    </FolderWrapper>
+  )
 }
 
 const mapIndexLinks = (files: Piece[]) =>
-  files.map(file => (
+  files.map((file) => (
     <NavLink
       to={file.path}
       key={file.path}
@@ -135,44 +129,34 @@ const Wrapper = styled.div`
 type IndexProps = {
   content: ContentFormatted
 }
-class Index extends React.Component<IndexProps> {
-  state = {
-    width: 340,
-  }
-  render() {
-    const {
-      content: { songs, poems },
-    } = this.props
-    const { width } = this.state
-    return (
-      <div>
-        <Resizable
-          size={{ width, height: '100%' }}
-          onResizeStop={(
-            e: any,
-            direction: any,
-            ref: any,
-            d: { width: number },
-          ) => {
-            this.setState({
-              width: width + d.width,
-            })
-          }}
-          enable={{ right: true }}
-          minWidth={10}
-        >
-          <Wrapper>
-            <Folder title={songs.title} defaultOpen>
-              <Folders folders={songs.folders} />
-            </Folder>
-            <Folder title={poems.title} defaultOpen>
-              <Folders folders={poems.folders} />
-            </Folder>
-          </Wrapper>
-        </Resizable>
-      </div>
-    )
-  }
+const Index: React.FC<IndexProps> = ({ content: { songs, poems } }) => {
+  const [width, setWidth] = React.useState(340)
+  return (
+    <div>
+      <Resizable
+        size={{ width, height: '100%' }}
+        onResizeStop={(
+          e: any,
+          direction: any,
+          ref: any,
+          d: { width: number },
+        ) => {
+          setWidth(width + d.width)
+        }}
+        enable={{ right: true }}
+        minWidth={10}
+      >
+        <Wrapper>
+          <Folder title={songs.title} defaultOpen>
+            <Folders folders={songs.folders} />
+          </Folder>
+          <Folder title={poems.title} defaultOpen>
+            <Folders folders={poems.folders} />
+          </Folder>
+        </Wrapper>
+      </Resizable>
+    </div>
+  )
 }
 
 export default Index

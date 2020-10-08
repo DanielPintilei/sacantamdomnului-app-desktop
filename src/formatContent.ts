@@ -53,7 +53,7 @@ const formatStanzas = (
       .replace(/\/\//g, '/')
       .replace(/\/(?!small>)(?!em>)/g, '<small>/</small>')
       .replace(/(\n)+$/, '')
-  const stanzas = contentSplit.map(stanza => {
+  const stanzas = contentSplit.map((stanza) => {
     return formatStanza(stanza)
   })
   stanzas[0] = `<h1>${number ? number + '. ' : ''}${title}</h1>${stanzas[0]}`
@@ -81,7 +81,7 @@ const formatStanzas = (
 
 const formatSongs = (songs: Pieces, displayNumber?: boolean): Pieces =>
   songs
-    .filter(x => x)
+    .filter((x) => x)
     .map(({ number, title, content }) => ({
       number,
       title,
@@ -105,13 +105,13 @@ const formatPoemsFolder = (books: Pieces): Pieces =>
   }))
 
 const formatPoemsFolders = (poems: PoemsRaw): Folders =>
-  Object.entries(poems).map(poem => ({
-    title: poem[0],
+  Object.entries(poems.content).map((poem) => ({
+    title: poem[1].name,
     files: formatPoemsFolder(poem[1].books),
   }))
 
 const formatContent = ({
-  saCantamDomnului,
+  scd,
   alteCantari,
   colinde,
   poezii,
@@ -121,15 +121,15 @@ const formatContent = ({
     folders: [
       {
         title: 'Să cântăm Domnului',
-        files: formatSongs(saCantamDomnului, true),
+        files: formatSongs(scd.content, true),
       },
       {
         title: 'Alte Cântări',
-        files: formatSongs(alteCantari),
+        files: formatSongs(alteCantari.content),
       },
       {
         title: 'Colinde',
-        files: formatSongs(colinde),
+        files: formatSongs(colinde.content),
       },
     ],
   },
@@ -161,11 +161,18 @@ export type Piece = {
   stanzas: string[]
 }
 type Pieces = Piece[]
-type PoemsRaw = { [title: string]: { books: Pieces } }
+type ContentRawSingle = {
+  version: number
+  content: Pieces
+}
+type PoemsRaw = {
+  version: number
+  content: { [title: string]: { name: string; books: Pieces } }
+}
 export type ContentRaw = {
-  saCantamDomnului: Pieces
-  alteCantari: Pieces
-  colinde: Pieces
+  scd: ContentRawSingle
+  alteCantari: ContentRawSingle
+  colinde: ContentRawSingle
   poezii: PoemsRaw
 }
 export type Folder = {
